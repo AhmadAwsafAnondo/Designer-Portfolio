@@ -1,0 +1,148 @@
+{
+  "designs": [
+    {
+      "id": "new-arrival-sneaker",
+      "title": "New Arrival Sneaker",
+      "short": "Sneaker",
+      "group": "Footwear",
+      "cat": "Footwear",
+      "desc": "Neon-lime light beams cut across a black set. The tracked-out headline interlocks with the shoe, so product and type share one plane and the lime swoosh ties back to the beams.",
+      "alt": "Social ad: black and blue running shoe on a dark plinth with neon lime light beams and the headline New Arrival Sneaker",
+      "img": "/work/new-arrival-sneaker.jpg",
+      "thumb": "/work/new-arrival-sneaker-thumb.jpg",
+      "sw": [
+        "#050505",
+        "#2D4134",
+        "#BADA7E",
+        "#55775A"
+      ],
+      "format": "1080 × 1080 px, square feed post",
+      "channel": "Instagram & Facebook",
+      "type": "Concept ad",
+      "featured": true
+    },
+    {
+      "id": "action-camera-launch",
+      "title": "Action Camera Launch",
+      "short": "Action cam",
+      "group": "Tech & audio",
+      "cat": "Consumer tech",
+      "desc": "A red-lit hero shot on a glass plinth, with a stacked ACTION CAMERA headline and spec callouts for the sensor, horizon lock and built-in mics.",
+      "alt": "Social ad: action camera with red glow on a dark plinth, feature callouts and a fast charging badge",
+      "img": "/work/action-camera-launch.jpg",
+      "thumb": "/work/action-camera-launch-thumb.jpg",
+      "sw": [
+        "#101112",
+        "#585A5A",
+        "#540404"
+      ],
+      "format": "1080 × 1080 px, square feed post",
+      "channel": "Instagram & Facebook",
+      "type": "Concept ad",
+      "featured": false
+    },
+    {
+      "id": "wireless-headset",
+      "title": "Wireless Headset",
+      "short": "Headset",
+      "group": "Tech & audio",
+      "cat": "Audio",
+      "desc": "A monochrome studio set: a spotlit plinth, a ghosted HEADSET wordmark and frosted-glass chips for fast charging, Wi-Fi and Bluetooth.",
+      "alt": "Social ad: black over-ear headphones floating above a spotlit plinth in a monochrome scene",
+      "img": "/work/wireless-headset.jpg",
+      "thumb": "/work/wireless-headset-thumb.jpg",
+      "sw": [
+        "#101010",
+        "#787878",
+        "#3F3F3F",
+        "#A3A3A3"
+      ],
+      "format": "1080 × 1080 px, square feed post",
+      "channel": "Instagram & Facebook",
+      "type": "Concept ad",
+      "featured": false
+    },
+    {
+      "id": "emo-pet-robot",
+      "title": "EMO Pet Robot",
+      "short": "EMO robot",
+      "group": "Tech & audio",
+      "cat": "Consumer tech",
+      "desc": "The palette is taken from the robot’s own cyan eyes. The product name is set as a giant backlit wordmark behind it, under a playful “Your pet robot” line.",
+      "alt": "Social ad: small desktop pet robot with glowing cyan eyes in front of a large backlit EMO wordmark",
+      "img": "/work/emo-pet-robot.jpg",
+      "thumb": "/work/emo-pet-robot-thumb.jpg",
+      "sw": [
+        "#181C22",
+        "#354E5F",
+        "#6A9EB1"
+      ],
+      "format": "1080 × 1080 px, square feed post",
+      "channel": "Instagram & Facebook",
+      "type": "Concept ad",
+      "featured": false
+    },
+    {
+      "id": "cool-water-fragrance",
+      "title": "Cool Water Fragrance",
+      "short": "Cool Water",
+      "group": "Fragrance",
+      "cat": "Fragrance",
+      "desc": "Cold blue light, a condensation-beaded bottle and glass cubes carry the “cool water” idea. A vertical glass chip promises 20-hour wear.",
+      "alt": "Social ad: blue fragrance bottle with water droplets on glass cubes under cold blue light",
+      "img": "/work/cool-water-fragrance.jpg",
+      "thumb": "/work/cool-water-fragrance-thumb.jpg",
+      "sw": [
+        "#316DA2",
+        "#000D1D",
+        "#45A9E7",
+        "#A3CEE8"
+      ],
+      "format": "1080 × 1080 px, square feed post",
+      "channel": "Instagram & Facebook",
+      "type": "Concept ad",
+      "featured": false
+    },
+    {
+      "id": "footwear-fashion",
+      "title": "Footwear Fashion",
+      "short": "Fashion",
+      "group": "Footwear",
+      "cat": "Footwear",
+      "desc": "Soft coral pleats and frosted-glass badges for 100% cotton and 10% off. A lighter, lifestyle-led retail post for a knit trainer.",
+      "alt": "Social ad: pink knit trainer on a white plinth against coral pleated backdrop with 10% off badge",
+      "img": "/work/footwear-fashion.jpg",
+      "thumb": "/work/footwear-fashion-thumb.jpg",
+      "sw": [
+        "#F6A1A0",
+        "#E4DDE0",
+        "#CE7478"
+      ],
+      "format": "1080 × 1080 px, square feed post",
+      "channel": "Instagram & Facebook",
+      "type": "Concept ad",
+      "featured": false
+    },
+    {
+      "id": "mega-burger-package",
+      "title": "Mega Burger Package",
+      "short": "Burger",
+      "group": "Food",
+      "cat": "Food & beverage",
+      "desc": "A yellow-to-orange ground, splash photography of the drink and a red starburst for 10% off. Built to sell a combo deal at a glance.",
+      "alt": "Social ad: burger and splashing cola in front of a bold MEGA BURGER headline with a 10% off starburst",
+      "img": "/work/mega-burger-package.jpg",
+      "thumb": "/work/mega-burger-package-thumb.jpg",
+      "sw": [
+        "#FACA2F",
+        "#EAE9D7",
+        "#A5893C",
+        "#412712"
+      ],
+      "format": "1080 × 1080 px, square feed post",
+      "channel": "Instagram & Facebook",
+      "type": "Concept ad",
+      "featured": false
+    }
+  ]
+}

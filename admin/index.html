@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin · Ahmad Awsaf Anondo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#F2F3F6; --surface:#FFFFFF; --ink:#12141A; --graphite:#555B69; --rule:#D8DBE2;
+  --accent:#C2006A; --on-accent:#FFFFFF; --ok:#1FA960; --bad:#C62828;
+  --cy:#00A0E3; --mg:#E6007E; --yl:#FFE100; --kk:#12141A;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{color-scheme:dark;--paper:#0F1116;--surface:#171A21;--ink:#ECEEF3;--graphite:#9BA1AF;--rule:#2A2E39;--accent:#FF5CAD;--on-accent:#12141A;--kk:#ECEEF3;--bad:#FF6B6B}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+img{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);font-stretch:125%;margin:0;line-height:1.05;letter-spacing:-.01em}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--graphite)}
+.cmyk{display:grid;grid-template-columns:repeat(4,1fr);height:5px}
+.cmyk i:nth-child(1){background:var(--cy)}.cmyk i:nth-child(2){background:var(--mg)}.cmyk i:nth-child(3){background:var(--yl)}.cmyk i:nth-child(4){background:var(--kk)}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+svg.i{width:18px;height:18px;flex:none}
+
+/* Buttons & inputs */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 15px/1 var(--body);padding:12px 18px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{background:color-mix(in srgb,var(--ink) 86%,var(--paper))}
+.btn.accent{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.danger{border-color:var(--bad);color:var(--bad)}
+.btn.small{padding:8px 12px;font-size:13.5px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.icon-btn{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--rule);background:var(--surface);color:var(--ink);cursor:pointer}
+.icon-btn:hover{border-color:var(--ink)}
+.icon-btn:disabled{opacity:.35;cursor:not-allowed}
+.icon-btn.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+label.f{display:grid;gap:6px;font-weight:600;font-size:14px}
+label.f .hint{font-weight:400;color:var(--graphite);font-size:13px}
+input[type=text],input[type=password],textarea,select{width:100%;font:16px/1.4 var(--body);color:var(--ink);background:var(--surface);border:1.5px solid var(--rule);border-radius:10px;padding:11px 12px}
+input:focus,textarea:focus{border-color:var(--ink);outline:none}
+textarea{min-height:96px;resize:vertical}
+.err{color:var(--bad);font-size:14px;font-weight:500;min-height:1em}
+
+/* Login */
+.login{min-height:100dvh;display:grid;place-items:center;padding:24px}
+.login form{width:min(400px,100%);background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:32px;display:grid;gap:18px}
+.login h1{font-size:30px;font-weight:800}
+.check{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--graphite)}
+
+/* App header */
+header.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+header.top .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;height:64px}
+header.top .brand{display:flex;flex-direction:column;line-height:1.1}
+header.top .brand b{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:17px}
+header.top .acts{display:flex;gap:8px;align-items:center}
+
+.head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;padding:40px 0 24px}
+.head h2{font-size:clamp(30px,4vw,46px);font-weight:800}
+.head p{color:var(--graphite);margin:10px 0 0;max-width:60ch}
+.note{background:color-mix(in srgb,var(--yl) 22%,var(--surface));border:1px solid color-mix(in srgb,var(--yl) 60%,var(--rule));border-radius:12px;padding:14px 16px;margin-bottom:20px;font-size:15px}
+
+/* Design list */
+.list{list-style:none;margin:0 0 80px;padding:0;display:grid;gap:10px}
+.row{display:grid;grid-template-columns:28px 76px minmax(0,1fr) auto;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:10px 12px 10px 8px}
+.row.drag{opacity:.4}
+.row.over{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 30%,transparent)}
+.grip{cursor:grab;color:var(--graphite);display:grid;place-items:center;height:100%}
+.grip:active{cursor:grabbing}
+.row img{width:76px;height:76px;object-fit:cover;border-radius:8px;background:var(--rule)}
+.row .t{min-width:0}
+.row h3{font-size:17px;font-weight:700;font-stretch:112%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .sub{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:4px 8px;border-radius:999px;border:1px solid var(--rule);color:var(--graphite)}
+.tag.feat{border-color:var(--accent);color:var(--accent)}
+.dots{display:flex;gap:4px}
+.dots i{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent)}
+.row .btns{display:flex;gap:6px;align-items:center}
+.num{font-family:var(--mono);font-size:12px;color:var(--accent);margin-right:6px}
+@media (max-width:640px){
+  .row{grid-template-columns:22px 60px minmax(0,1fr);gap:12px}
+  .row img{width:60px;height:60px}
+  .row .btns{grid-column:2/-1;justify-content:flex-start}
+  header.top .brand .mono{display:none}
+}
+.empty{text-align:center;padding:60px 20px;border:1.5px dashed var(--rule);border-radius:14px;color:var(--graphite)}
+
+/* Editor */
+dialog.ed{width:min(1040px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:0;border:0;border-radius:18px;background:var(--paper);color:var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.35)}
+dialog.ed::backdrop{background:color-mix(in srgb,#07080B 70%,transparent);backdrop-filter:blur(3px)}
+.ed-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--rule);position:sticky;top:0;background:var(--paper);z-index:2}
+.ed-head h2{font-size:22px;font-weight:800}
+.ed-body{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:28px;padding:22px}
+@media (max-width:820px){.ed-body{grid-template-columns:1fr}}
+.ed-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:16px 22px;border-top:1px solid var(--rule);position:sticky;bottom:0;background:var(--paper)}
+.ed-foot .r{display:flex;gap:10px;margin-left:auto}
+.fields{display:grid;gap:16px;align-content:start}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:560px){.two,.three{grid-template-columns:1fr}}
+details.more{border-top:1px solid var(--rule);padding-top:14px}
+details.more summary{cursor:pointer;font-weight:600;font-size:14px}
+details.more[open] summary{margin-bottom:14px}
+details.more .fields{gap:14px}
+
+.drop{position:relative;display:grid;place-items:center;aspect-ratio:1;border:2px dashed var(--rule);border-radius:14px;background:var(--surface);cursor:pointer;overflow:hidden;text-align:center;padding:20px;transition:border-color .2s,background .2s}
+.drop:hover,.drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 6%,var(--surface))}
+.drop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.drop .ph{display:grid;gap:8px;justify-items:center;color:var(--graphite)}
+.drop .ph b{color:var(--ink);font-size:17px}
+.drop .ph svg{width:36px;height:36px;color:var(--accent)}
+.drop .busy{position:absolute;inset:0;display:grid;place-items:center;background:color-mix(in srgb,var(--paper) 75%,transparent);font-weight:600}
+.img-info{display:flex;justify-content:space-between;gap:10px;margin-top:10px;flex-wrap:wrap}
+
+.pal{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pal .c{display:flex;align-items:center;gap:6px;border:1.5px solid var(--rule);border-radius:999px;padding:4px 6px 4px 4px;background:var(--surface)}
+.pal .c input[type=color]{width:26px;height:26px;border:0;padding:0;border-radius:50%;background:none;cursor:pointer}
+.pal .c input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+.pal .c input[type=color]::-webkit-color-swatch{border:0;border-radius:50%}
+.pal .c input[type=text]{width:84px;padding:4px 6px;font:13px var(--mono);border:0;background:transparent}
+.pal .c button{border:0;background:none;color:var(--graphite);cursor:pointer;padding:2px;display:grid}
+.pal .c button:hover{color:var(--bad)}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:999px;font-weight:600;font-size:15px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:calc(100vw - 32px)}
+.toast.bad{background:var(--bad);color:#fff}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:sp .7s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(1turn)}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-grip" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-wand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4-11 11 5 5 11-11z"/><path d="M14 5l5 5"/></symbol>
+</svg>
+
+<!-- Login -->
+<main class="login" id="loginView">
+  <form id="loginForm" novalidate>
+    <div class="cmyk" aria-hidden="true" style="max-width:96px"><i></i><i></i><i></i><i></i></div>
+    <div><span class="mono">Portfolio admin</span><h1 style="margin-top:8px">Sign in</h1></div>
+    <label class="f">Password
+      <input type="password" id="pw" autocomplete="current-password" required>
+    </label>
+    <label class="check"><input type="checkbox" id="remember"> Keep me signed in on this device</label>
+    <p class="err" id="loginErr" role="alert"></p>
+    <button class="btn solid" type="submit" id="loginBtn">Sign in</button>
+  </form>
+</main>
+
+<!-- App -->
+<div id="appView" hidden>
+  <header class="top">
+    <div class="cmyk" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="wrap bar">
+      <div class="brand"><b>Portfolio admin</b><span class="mono">Ahmad Awsaf Anondo</span></div>
+      <div class="acts">
+        <a class="btn small" href="/#work" target="_blank" rel="noopener">View site <svg class="i"><use href="#i-ext"/></svg></a>
+        <button class="btn small" id="logout">Log out</button>
+      </div>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="head">
+      <div>
+        <span class="mono" id="countLbl">Designs</span>
+        <h2>Your work</h2>
+        <p>Drag rows to change the order on your site. The starred design is shown large at the top of the Work section, so it always stays first.</p>
+      </div>
+      <button class="btn accent" id="addBtn"><svg class="i"><use href="#i-plus"/></svg>Add design</button>
+    </div>
+    <div class="note" id="seedNote" hidden>These are the designs currently on your site. Your first change saves them to the admin, and from then on the site shows whatever you manage here.</div>
+    <ul class="list" id="list"></ul>
+  </main>
+</div>
+
+<!-- Editor -->
+<dialog class="ed" id="ed" aria-labelledby="edTitle">
+  <form id="edForm" novalidate>
+    <div class="ed-head">
+      <h2 id="edTitle">Add design</h2>
+      <button type="button" class="icon-btn" id="edClose" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="ed-body">
+      <div>
+        <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose an image">
+          <div class="ph" id="dropPh">
+            <svg><use href="#i-upload"/></svg>
+            <b>Drop your design here</b>
+            <span>or click to choose a file · you can also paste an image</span>
+            <span class="mono">JPG · PNG · WebP · GIF</span>
+          </div>
+          <img id="preview" alt="" hidden>
+          <div class="busy" id="dropBusy" hidden><span><span class="spin"></span> Preparing image…</span></div>
+        </div>
+        <input type="file" id="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" hidden>
+        <div class="img-info"><span class="mono" id="imgInfo"></span><button type="button" class="btn small" id="replaceBtn" hidden>Replace image</button></div>
+        <p class="err" id="imgErr"></p>
+      </div>
+      <div class="fields">
+        <label class="f">Title
+          <input type="text" id="fTitle" maxlength="120" placeholder="e.g. Summer Juice Launch" required>
+        </label>
+        <div class="two">
+          <label class="f">Filter tab <span class="hint">Groups designs in the filter buttons</span>
+            <input type="text" id="fGroup" list="groups" maxlength="40" placeholder="e.g. Food">
+          </label>
+          <label class="f">Category label <span class="hint">Small pink label on the card</span>
+            <input type="text" id="fCat" list="cats" maxlength="60" placeholder="e.g. Food &amp; beverage">
+          </label>
+        </div>
+        <label class="f">Description
+          <textarea id="fDesc" maxlength="1200" placeholder="What's the idea behind it? Lighting, type, colour…"></textarea>
+        </label>
+        <div class="f" style="display:grid;gap:8px">
+          <span style="font-weight:600;font-size:14px">Palette <span class="hint" style="font-weight:400;color:var(--graphite);font-size:13px">· picked from your image, edit if you like</span></span>
+          <div class="pal" id="pal"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button type="button" class="btn small" id="addColor"><svg class="i"><use href="#i-plus"/></svg>Add colour</button>
+            <button type="button" class="btn small" id="repick"><svg class="i"><use href="#i-wand"/></svg>Pick from image again</button>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" id="fFeat"> Feature this design (shown large at the top)</label>
+        <details class="more">
+          <summary>More details</summary>
+          <div class="fields">
+            <div class="three">
+              <label class="f">Format<input type="text" id="fFormat" list="formats" maxlength="120"></label>
+              <label class="f">Channel<input type="text" id="fChannel" list="channels" maxlength="120"></label>
+              <label class="f">Type<input type="text" id="fType" list="types" maxlength="120"></label>
+            </div>
+            <div class="two">
+              <label class="f">Short label <span class="hint">Under the thumbnail in the hero strip</span>
+                <input type="text" id="fShort" maxlength="40" placeholder="Uses the title if empty">
+              </label>
+              <label class="f">Image description <span class="hint">For screen readers and Google</span>
+                <input type="text" id="fAlt" maxlength="300" placeholder="Social ad: …">
+              </label>
+            </div>
+          </div>
+        </details>
+        <p class="err" id="edErr" role="alert"></p>
+      </div>
+    </div>
+    <div class="ed-foot">
+      <button type="button" class="btn danger" id="edDelete" hidden><svg class="i"><use href="#i-trash"/></svg>Delete</button>
+      <div class="r">
+        <button type="button" class="btn" id="edCancel">Cancel</button>
+        <button type="submit" class="btn solid" id="edSave">Publish</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<datalist id="groups"></datalist><datalist id="cats"></datalist>
+<datalist id="formats"></datalist><datalist id="channels"></datalist><datalist id="types"></datalist>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2, '0');
+
+/* ---------- storage helpers (may be unavailable) ---------- */
+const store = {
+  get() { try { return sessionStorage.getItem('pa_pw') || localStorage.getItem('pa_pw') || ''; } catch { return ''; } },
+  set(v, keep) { try { sessionStorage.setItem('pa_pw', v); if (keep) localStorage.setItem('pa_pw', v); } catch {} },
+  clear() { try { sessionStorage.removeItem('pa_pw'); localStorage.removeItem('pa_pw'); } catch {} },
+};
+let PW = '';
+
+/* ---------- API ---------- */
+async function api(path, opts = {}) {
+  const res = await fetch(path, { ...opts, headers: { ...(opts.headers || {}), Authorization: 'Bearer ' + PW } });
+  let data = null;
+  try { data = await res.json(); } catch {}
+  if (res.status === 401) { signOut('Your session expired. Sign in again.'); throw new Error('Wrong password.'); }
+  if (res.status === 429) throw new Error('Too many attempts. Wait a minute and try again.');
+  if (!res.ok) throw new Error(data?.error || `Something went wrong (${res.status}).`);
+  return data;
+}
+
+/* ---------- toast ---------- */
+let tt;
+function toast(msg, bad) {
+  const t = $('#toast'); t.textContent = msg; t.classList.toggle('bad', !!bad); t.hidden = false;
+  clearTimeout(tt); tt = setTimeout(() => t.hidden = true, bad ? 5000 : 2600);
+}
+
+/* ---------- login ---------- */
+async function tryLogin(pw) {
+  const r = await fetch('/api/login', { method: 'POST', headers: { Authorization: 'Bearer ' + pw } });
+  if (r.ok) return true;
+  let d = null; try { d = await r.json(); } catch {}
+  if (r.status === 401) throw new Error('That password is not right.');
+  if (r.status === 429) throw new Error('Too many attempts. Wait a minute and try again.');
+  if (r.status === 404) throw new Error('The admin API is not deployed yet. Push the new files to GitHub first.');
+  throw new Error(d?.error || `Could not sign in (${r.status}).`);
+}
+$('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const pw = $('#pw').value; const btn = $('#loginBtn');
+  if (!pw) { $('#loginErr').textContent = 'Enter your admin password.'; return; }
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Signing in';
+  try {
+    await tryLogin(pw);
+    PW = pw; store.set(pw, $('#remember').checked); $('#pw').value = '';
+    $('#loginErr').textContent = ''; startApp();
+  } catch (err) { $('#loginErr').textContent = err.message; }
+  btn.disabled = false; btn.textContent = 'Sign in';
+});
+function signOut(msg) {
+  store.clear(); PW = '';
+  $('#appView').hidden = true; $('#loginView').hidden = false;
+  $('#loginErr').textContent = msg || '';
+  if ($('#ed').open) $('#ed').close();
+}
+$('#logout').addEventListener('click', () => signOut());
+
+/* ---------- data ---------- */
+let D = [];          // designs, in site order
+let seeded = false;  // true while showing the starter designs from /data/designs.json
+async function load() {
+  $('#list').innerHTML = '<li class="empty"><span class="spin"></span> Loading designs…</li>';
+  try {
+    const r = await fetch('/api/designs', { cache: 'no-store' }).then(r => r.json());
+    if (Array.isArray(r.designs)) { D = r.designs; seeded = false; }
+    else { D = (await fetch('/data/designs.json', { cache: 'no-store' }).then(r => r.json())).designs || []; seeded = true; }
+  } catch { D = []; toast('Could not load designs. Refresh to try again.', true); }
+  renderList();
+}
+// The featured design is always first, matching how the site shows it
+function norm(list) { const i = list.findIndex(d => d.featured); return i > 0 ? [list[i], ...list.slice(0, i), ...list.slice(i + 1)] : list; }
+async function save(list, okMsg) {
+  list = norm(list);
+  const r = await api('/api/designs', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ designs: list }) });
+  D = r.designs; seeded = false; renderList();
+  if (okMsg) toast(okMsg);
+}
+const blobKey = u => (typeof u === 'string' && u.startsWith('/img/')) ? u.slice(5) : null;
+function deleteImages(...urls) {
+  const keys = [...new Set(urls.map(blobKey).filter(Boolean))];
+  if (!keys.length) return;
+  api('/api/upload?' + keys.map(k => 'key=' + encodeURIComponent(k)).join('&'), { method: 'DELETE' }).catch(() => {});
+}
+
+/* ---------- list ---------- */
+function renderList() {
+  $('#seedNote').hidden = !seeded;
+  $('#countLbl').textContent = `${pad(D.length)} design${D.length === 1 ? '' : 's'} on your site`;
+  const L = $('#list');
+  if (!D.length) { L.innerHTML = '<li class="empty"><b>No designs yet.</b><br>Click “Add design” to upload your first one.</li>'; fillLists(); return; }
+  L.innerHTML = D.map((d, i) => `
+    <li class="row" draggable="${!d.featured}" data-i="${i}">
+      <span class="grip" title="Drag to reorder" aria-hidden="true"><svg class="i"><use href="#i-grip"/></svg></span>
+      <img src="${esc(d.thumb || d.img)}" alt="" loading="lazy">
+      <div class="t">
+        <h3><span class="num">${pad(i + 1)}</span>${esc(d.title)}</h3>
+        <div class="sub">
+          ${d.featured ? '<span class="tag feat">Featured</span>' : ''}
+          <span class="tag">${esc(d.group || 'Other')}</span>
+          ${d.cat && d.cat !== d.group ? `<span class="tag">${esc(d.cat)}</span>` : ''}
+          <span class="dots">${(d.sw || []).map(c => `<i style="background:${esc(c)}"></i>`).join('')}</span>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="icon-btn" data-act="up" aria-label="Move ${esc(d.title)} up" ${i === 0 || d.featured || (i === 1 && D[0].featured) ? 'disabled' : ''}><svg class="i"><use href="#i-up"/></svg></button>
+        <button class="icon-btn" data-act="down" aria-label="Move ${esc(d.title)} down" ${i === D.length - 1 || d.featured ? 'disabled' : ''}><svg class="i"><use href="#i-down"/></svg></button>
+        <button class="icon-btn ${d.featured ? 'on' : ''}" data-act="feat" aria-label="${d.featured ? 'Featured' : 'Make featured'}: ${esc(d.title)}" aria-pressed="${!!d.featured}"><svg class="i"><use href="#i-star"/></svg></button>
+        <button class="btn small" data-act="edit"><svg class="i"><use href="#i-edit"/></svg>Edit</button>
+      </div>
+    </li>`).join('');
+  fillLists();
+}
+function fillLists() {
+  const uniq = (k, extra = []) => [...new Set([...D.map(d => d[k]).filter(Boolean), ...extra])];
+  const opts = (id, vals) => $(id).innerHTML = vals.map(v => `<option value="${esc(v)}">`).join('');
+  opts('#groups', uniq('group')); opts('#cats', uniq('cat'));
+  opts('#formats', uniq('format', ['1080 × 1080 px, square feed post', '1080 × 1350 px, portrait feed post', '1080 × 1920 px, story / reel', 'A3 poster']));
+  opts('#channels', uniq('channel', ['Instagram & Facebook', 'Instagram', 'Facebook', 'LinkedIn', 'Print']));
+  opts('#types', uniq('type', ['Concept ad', 'Client work', 'Product poster', 'Brand identity']));
+}
+let busy = false;
+async function reorder(list, msg) {
+  if (busy) return; busy = true;
+  list = norm(list);
+  const before = D; D = list; renderList();
+  try { await save(list, msg); } catch (e) { D = before; renderList(); toast(e.message, true); }
+  busy = false;
+}
+$('#list').addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const i = +b.closest('.row').dataset.i, act = b.dataset.act, list = D.slice();
+  if (act === 'edit') return openEditor(i);
+  if (act === 'up' && i > 0) { [list[i - 1], list[i]] = [list[i], list[i - 1]]; reorder(list, 'Order saved'); }
+  if (act === 'down' && i < list.length - 1) { [list[i + 1], list[i]] = [list[i], list[i + 1]]; reorder(list, 'Order saved'); }
+  if (act === 'feat') reorder(list.map((d, j) => ({ ...d, featured: j === i ? !d.featured : false })), list[i].featured ? 'No featured design now' : `“${list[i].title}” is now featured`);
+});
+// drag and drop
+let dragI = null;
+$('#list').addEventListener('dragstart', e => { const r = e.target.closest('.row'); if (!r) return; dragI = +r.dataset.i; r.classList.add('drag'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', dragI); } catch {} });
+$('#list').addEventListener('dragend', () => { dragI = null; $$('.row').forEach(r => r.classList.remove('drag', 'over')); });
+$('#list').addEventListener('dragover', e => { const r = e.target.closest('.row'); if (r == null || dragI == null) return; e.preventDefault(); $$('.row').forEach(x => x.classList.toggle('over', x === r)); });
+$('#list').addEventListener('drop', e => {
+  const r = e.target.closest('.row'); if (!r || dragI == null) return; e.preventDefault();
+  const to = +r.dataset.i; if (to === dragI) return;
+  const list = D.slice(); const [m] = list.splice(dragI, 1); list.splice(to, 0, m);
+  reorder(list, 'Order saved');
+});
+
+/* ---------- image processing ---------- */
+const OK_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif'];
+const MAX_BYTES = 3.6 * 1024 * 1024, MAX_SIDE = 2160;
+function loadImg(src) { return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => rej(new Error('This file could not be opened as an image.')); im.src = src; }); }
+const toBlob = (c, type, q) => new Promise(r => c.toBlob(r, type, q));
+function hasAlpha(ctx, w, h) {
+  const d = ctx.getImageData(0, 0, w, h).data;
+  for (let i = 3; i < d.length; i += 4 * 7) if (d[i] < 250) return true;
+  return false;
+}
+async function prepare(file) {
+  if (!file || !file.type.startsWith('image/')) throw new Error('Choose an image file (JPG, PNG, WebP or GIF).');
+  const url = URL.createObjectURL(file);
+  try {
+    const im = await loadImg(url);
+    const w0 = im.naturalWidth, h0 = im.naturalHeight;
+    let main = file, w = w0, h = h0;
+    const needs = !OK_TYPES.includes(file.type) || file.size > MAX_BYTES || Math.max(w0, h0) > MAX_SIDE;
+    if (needs) {
+      const s = Math.min(1, MAX_SIDE / Math.max(w0, h0)); w = Math.round(w0 * s); h = Math.round(h0 * s);
+      const c = Object.assign(document.createElement('canvas'), { width: w, height: h }); const x = c.getContext('2d');
+      x.drawImage(im, 0, 0, w, h);
+      const png = file.type === 'image/png' && hasAlpha(x, w, h);
+      let q = 0.92; main = await toBlob(c, png ? 'image/png' : 'image/jpeg', q);
+      while (!png && main && main.size > MAX_BYTES && q > 0.5) { q -= 0.08; main = await toBlob(c, 'image/jpeg', q); }
+      if (!main || main.size > MAX_BYTES) throw new Error('This image is too large even after compressing. Try exporting it smaller.');
+    }
+    // square thumbnail for the hero contact sheet and the admin list
+    const T = 480, side = Math.min(w0, h0);
+    const tc = Object.assign(document.createElement('canvas'), { width: T, height: T });
+    tc.getContext('2d').drawImage(im, (w0 - side) / 2, (h0 - side) / 2, side, side, 0, 0, T, T);
+    const thumb = await toBlob(tc, 'image/jpeg', 0.85);
+    return { main, thumb, w, h, w0, h0, palette: palette(im), resized: needs };
+  } finally { URL.revokeObjectURL(url); }
+}
+// Pull 4 dominant, distinct colours from an image
+function palette(im, n = 4) {
+  const S = 72, c = Object.assign(document.createElement('canvas'), { width: S, height: S });
+  const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(im, 0, 0, S, S);
+  let d; try { d = x.getImageData(0, 0, S, S).data; } catch { return []; }
+  const buckets = new Map();
+  for (let i = 0; i < d.length; i += 4) {
+    if (d[i + 3] < 128) continue;
+    const k = (d[i] >> 4) << 8 | (d[i + 1] >> 4) << 4 | (d[i + 2] >> 4);
+    const b = buckets.get(k) || { n: 0, r: 0, g: 0, b: 0 }; b.n++; b.r += d[i]; b.g += d[i + 1]; b.b += d[i + 2]; buckets.set(k, b);
+  }
+  const cols = [...buckets.values()].map(b => ({ n: b.n, r: b.r / b.n, g: b.g / b.n, b: b.b / b.n }))
+    .map(c => { const mx = Math.max(c.r, c.g, c.b), mn = Math.min(c.r, c.g, c.b); c.sat = mx ? (mx - mn) / mx : 0; c.score = c.n * (0.6 + c.sat); return c; })
+    .sort((a, b) => b.score - a.score);
+  const out = [];
+  const dist = (a, b) => Math.hypot(a.r - b.r, a.g - b.g, a.b - b.b);
+  for (const c of cols) { if (out.every(o => dist(o, c) > 52)) out.push(c); if (out.length === n) break; }
+  // most common first, like the existing cards
+  out.sort((a, b) => b.n - a.n);
+  return out.map(c => '#' + [c.r, c.g, c.b].map(v => Math.round(v).toString(16).padStart(2, '0')).join('').toUpperCase());
+}
+
+/* ---------- editor ---------- */
+const ed = $('#ed');
+let editing = -1, pending = null, curImg = '', curThumb = '', autoPal = [], dirty = false;
+const F = { title: '#fTitle', group: '#fGroup', cat: '#fCat', desc: '#fDesc', format: '#fFormat', channel: '#fChannel', type: '#fType', short: '#fShort', alt: '#fAlt' };
+function setPal(list) {
+  $('#pal').innerHTML = list.map(c => `<span class="c"><input type="color" value="${esc(c.length === 4 ? '#' + [...c.slice(1)].map(x => x + x).join('') : c)}" aria-label="Colour ${esc(c)}"><input type="text" value="${esc(c)}" maxlength="7" aria-label="Hex code"><button type="button" aria-label="Remove ${esc(c)}"><svg class="i" style="width:14px;height:14px"><use href="#i-x"/></svg></button></span>`).join('');
+  $('#addColor').disabled = list.length >= 6;
+}
+const getPal = () => $$('#pal .c input[type=text]').map(i => i.value.trim().toUpperCase()).filter(v => /^#[0-9A-F]{6}$|^#[0-9A-F]{3}$/.test(v));
+$('#pal').addEventListener('input', e => {
+  const c = e.target.closest('.c'); if (!c) return; dirty = true;
+  if (e.target.type === 'color') c.querySelector('input[type=text]').value = e.target.value.toUpperCase();
+  else if (/^#[0-9a-f]{6}$/i.test(e.target.value)) c.querySelector('input[type=color]').value = e.target.value;
+});
+$('#pal').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; b.closest('.c').remove(); dirty = true; $('#addColor').disabled = getPal().length >= 6; });
+$('#addColor').addEventListener('click', () => { setPal([...getPal(), '#888888']); dirty = true; $$('#pal input[type=color]').pop().click(); });
+$('#repick').addEventListener('click', async () => {
+  if (autoPal.length) return setPal(autoPal);
+  const src = pending ? null : (curThumb || curImg); if (!src) return toast('Add an image first.', true);
+  try { const im = await loadImg(src); setPal(autoPal = palette(im)); dirty = true; } catch { toast('Could not read colours from that image.', true); }
+});
+
+function showPreview(src, info) {
+  $('#preview').src = src; $('#preview').hidden = !src; $('#dropPh').hidden = !!src;
+  $('#replaceBtn').hidden = !src; $('#imgInfo').textContent = info || '';
+}
+function openEditor(i = -1) {
+  editing = i; pending = null; autoPal = []; dirty = false;
+  const d = i >= 0 ? D[i] : { format: '1080 × 1080 px, square feed post', channel: 'Instagram & Facebook', type: 'Concept ad', sw: [] };
+  for (const [k, sel] of Object.entries(F)) $(sel).value = d[k] || '';
+  $('#fFeat').checked = !!d.featured;
+  curImg = d.img || ''; curThumb = d.thumb || '';
+  showPreview(curThumb || curImg, curImg ? 'Current image' : '');
+  if (curImg) { $('#preview').src = curImg; }
+  setPal(d.sw || []);
+  $('#edTitle').textContent = i >= 0 ? 'Edit design' : 'Add design';
+  $('#edSave').textContent = i >= 0 ? 'Save changes' : 'Publish';
+  $('#edDelete').hidden = i < 0;
+  $('#edErr').textContent = ''; $('#imgErr').textContent = '';
+  $('.more').open = i >= 0;
+  try { ed.showModal(); } catch { ed.setAttribute('open', ''); }
+  (i >= 0 ? $('#fTitle') : $('#drop')).focus();
+}
+$('#addBtn').addEventListener('click', () => openEditor(-1));
+function closeEditor() {
+  if (dirty && !confirm('Discard your changes to this design?')) return;
+  if (pending?.previewUrl) URL.revokeObjectURL(pending.previewUrl);
+  pending = null; ed.close();
+}
+$('#edClose').addEventListener('click', closeEditor);
+$('#edCancel').addEventListener('click', closeEditor);
+ed.addEventListener('cancel', e => { e.preventDefault(); closeEditor(); });
+$('#edForm').addEventListener('input', () => dirty = true);
+
+async function takeFile(file) {
+  $('#imgErr').textContent = ''; $('#dropBusy').hidden = false;
+  try {
+    const p = await prepare(file);
+    if (pending?.previewUrl) URL.revokeObjectURL(pending.previewUrl);
+    pending = { ...p, previewUrl: URL.createObjectURL(p.main) };
+    const kb = p.main.size > 1048576 ? (p.main.size / 1048576).toFixed(1) + ' MB' : Math.round(p.main.size / 1024) + ' KB';
+    showPreview(pending.previewUrl, `${p.w} × ${p.h} px · ${kb}${p.resized ? ' · resized for the web' : ''}`);
+    autoPal = p.palette; setPal(p.palette); dirty = true;
+    if (!$('#fTitle').value) { const n = (file.name || '').replace(/\.[a-z0-9]+$/i, '').replace(/[-_]+/g, ' ').trim(); if (n && !/^(img|image|frame|screenshot|untitled)\b/i.test(n)) $('#fTitle').value = n.replace(/\b\w/g, c => c.toUpperCase()); }
+  } catch (e) { $('#imgErr').textContent = e.message; }
+  $('#dropBusy').hidden = true;
+}
+const drop = $('#drop');
+drop.addEventListener('click', () => $('#file').click());
+drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('#file').click(); } });
+$('#replaceBtn').addEventListener('click', () => $('#file').click());
+$('#file').addEventListener('change', e => { const f = e.target.files[0]; if (f) takeFile(f); e.target.value = ''; });
+['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(t => drop.addEventListener(t, () => drop.classList.remove('over')));
+drop.addEventListener('drop', e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) takeFile(f); });
+document.addEventListener('paste', e => {
+  if (!ed.open) return;
+  const f = [...(e.clipboardData?.files || [])].find(f => f.type.startsWith('image/'));
+  if (f) { e.preventDefault(); takeFile(f); }
+});
+
+$('#edForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const v = Object.fromEntries(Object.entries(F).map(([k, sel]) => [k, $(sel).value.trim()]));
+  const err = $('#edErr');
+  if (!pending && !curImg) { err.textContent = 'Add an image for this design.'; return; }
+  if (!v.title) { err.textContent = 'Give the design a title.'; $('#fTitle').focus(); return; }
+  err.textContent = '';
+  const btn = $('#edSave'), label = btn.textContent; btn.disabled = true;
+  let img = curImg, thumb = curThumb, uploaded = null;
+  try {
+    if (pending) {
+      btn.innerHTML = '<span class="spin"></span> Uploading image';
+      const fd = new FormData();
+      const ext = { 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif', 'image/avif': 'avif' }[pending.main.type] || 'jpg';
+      fd.append('file', pending.main, 'design.' + ext);
+      fd.append('thumb', pending.thumb, 'thumb.jpg');
+      uploaded = await api('/api/upload', { method: 'POST', body: fd });
+      img = uploaded.img; thumb = uploaded.thumb;
+    }
+    btn.innerHTML = '<span class="spin"></span> Saving';
+    const old = editing >= 0 ? D[editing] : null;
+    const item = {
+      ...(old || {}), ...v, img, thumb, sw: getPal(), featured: $('#fFeat').checked,
+      id: old?.id || 'd-' + Date.now().toString(36),
+      alt: v.alt || `${v.cat ? v.cat + ' design' : 'Design'}: ${v.title}`,
+      group: v.group || v.cat || 'Other',
+    };
+    let list = D.slice();
+    if (old) list[editing] = item; else list.unshift(item); // new designs appear first
+    if (item.featured) list = list.map(d => d === item ? d : { ...d, featured: false });
+    await save(list, old ? 'Saved. Your site is updated.' : 'Published. It’s live on your site now.');
+    if (uploaded && old && old.img !== img) deleteImages(old.img, old.thumb);
+    dirty = false; pending = null; ed.close();
+  } catch (e2) {
+    err.textContent = e2.message;
+    if (uploaded) deleteImages(uploaded.img, uploaded.thumb);
+  }
+  btn.disabled = false; btn.textContent = label;
+});
+$('#edDelete').addEventListener('click', async () => {
+  const d = D[editing]; if (!d) return;
+  if (!confirm(`Delete “${d.title}” from your portfolio? This can’t be undone.`)) return;
+  const btn = $('#edDelete'); btn.disabled = true;
+  try {
+    await save(D.filter((_, j) => j !== editing), `Deleted “${d.title}”`);
+    deleteImages(d.img, d.thumb);
+    dirty = false; ed.close();
+  } catch (e) { $('#edErr').textContent = e.message; }
+  btn.disabled = false;
+});
+
+/* ---------- start ---------- */
+function startApp() { $('#loginView').hidden = true; $('#appView').hidden = false; load(); }
+(async () => {
+  const saved = store.get();
+  if (!saved) return $('#pw').focus();
+  try { await tryLogin(saved); PW = saved; startApp(); }
+  catch { store.clear(); $('#pw').focus(); }
+})();
+</script>
+</body>
+</html>
