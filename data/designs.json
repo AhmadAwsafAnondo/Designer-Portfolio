@@ -1,6 +1,146 @@
 {
   "designs": [
     {
+      "id": "holaai",
+      "title": "HolaAi: AI Content Tools Platform",
+      "short": "HolaAi platform",
+      "section": "uiux",
+      "group": "Web app",
+      "cat": "AI SaaS · Web app",
+      "desc": "UI/UX design for HolaAi, an all-in-one AI platform for writing articles, generating blog titles and images, removing backgrounds and objects, and reviewing resumes. I designed both sides: a soft-gradient marketing site with tool cards, testimonials and Free/Premium pricing, and the signed-in app with a clear sidebar, a two-panel input/result layout for every tool, and a colour per tool so each one is easy to recognise.",
+      "alt": "HolaAi landing page: headline 'Unleash creativity with HolaAi' over a soft gradient, with six purple buttons for the AI tools",
+      "img": "/work/holaai-01.jpg",
+      "thumb": "/work/holaai-01-thumb.jpg",
+      "w": 1920,
+      "h": 1080,
+      "gallery": [
+        {
+          "img": "/work/holaai-02.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "Effortless AI solutions: the six tools"
+        },
+        {
+          "img": "/work/holaai-03.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "Creators and media partners"
+        },
+        {
+          "img": "/work/holaai-04.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "Pricing: Free and Premium plans"
+        },
+        {
+          "img": "/work/holaai-05.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "About us"
+        },
+        {
+          "img": "/work/holaai-06.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "App dashboard: recent creations"
+        },
+        {
+          "img": "/work/holaai-07.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "Write article"
+        },
+        {
+          "img": "/work/holaai-08.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "AI image generator"
+        },
+        {
+          "img": "/work/holaai-09.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "Background removal"
+        },
+        {
+          "img": "/work/holaai-10.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "Account and billing"
+        }
+      ],
+      "sw": [
+        "#5B3FE4",
+        "#8A3FF0",
+        "#F3F6FB",
+        "#111111"
+      ],
+      "format": "Desktop website + web app, 1920 × 1080",
+      "channel": "Figma",
+      "type": "UI/UX design",
+      "featured": false,
+      "video": "",
+      "link": ""
+    },
+    {
+      "id": "curabot",
+      "title": "CuraBot: AI Health Assistant Website",
+      "short": "CuraBot website",
+      "section": "uiux",
+      "group": "Website",
+      "cat": "Healthcare website",
+      "desc": "Website for CuraBot, an AI-powered health assistant built by our team at United International University. I designed the UI and built the frontend: frosted-glass panels over a soft DNA backdrop, quick-access cards for symptom checks, doctors, hospital beds and maternity care, and warm copper accents that keep a medical product feeling human.",
+      "alt": "CuraBot website home page: frosted-glass navigation, headline 'Early health assessment, right when you need it' and four quick-access cards over a DNA background",
+      "img": "/work/curabot-01.jpg",
+      "thumb": "/work/curabot-01-thumb.jpg",
+      "w": 1920,
+      "h": 1080,
+      "gallery": [
+        {
+          "img": "/work/curabot-02.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "About: mission and impact"
+        },
+        {
+          "img": "/work/curabot-03.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "Mission and story"
+        },
+        {
+          "img": "/work/curabot-04.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "What we stand for"
+        },
+        {
+          "img": "/work/curabot-05.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "Team and affiliation"
+        },
+        {
+          "img": "/work/curabot-06.jpg",
+          "w": 1920,
+          "h": 1080,
+          "caption": "Call to action and footer"
+        }
+      ],
+      "sw": [
+        "#5A2A0C",
+        "#B8732E",
+        "#FDE5C8",
+        "#212121"
+      ],
+      "format": "Desktop website, 1920 × 1080",
+      "channel": "Figma",
+      "type": "UI/UX design · Team project",
+      "featured": false,
+      "video": "",
+      "link": ""
+    },
+    {
       "id": "new-arrival-sneaker",
       "title": "New Arrival Sneaker",
       "short": "Sneaker",

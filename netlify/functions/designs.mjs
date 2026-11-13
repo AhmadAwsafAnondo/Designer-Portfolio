@@ -79,6 +79,10 @@ function clean(list) {
       link: url(d.link),
       w: int(d.w),
       h: int(d.h),
+      // extra screens for multi-page work such as websites
+      gallery: (Array.isArray(d.gallery) ? d.gallery : []).slice(0, 24)
+        .map((g) => ({ img: imgPath(g?.img), w: int(g?.w), h: int(g?.h), caption: str(g?.caption, 120) }))
+        .filter((g) => g.img),
     };
   });
 }
@@ -88,7 +92,7 @@ function clean(list) {
 export default async (req) => {
   if (req.method === "GET") {
     const data = await store().get(KEY, { type: "json" });
-    return json({ designs: data?.designs ?? null, categories: data?.categories ?? null, updatedAt: data?.updatedAt ?? null });
+    return json({ designs: data?.designs ?? null, categories: data?.categories ?? null, retired: data?.retired ?? [], updatedAt: data?.updatedAt ?? null });
   }
   if (req.method === "PUT") {
     const denied = requireAdmin(req);
@@ -105,8 +109,13 @@ export default async (req) => {
     } catch (e) {
       return json({ error: e.message }, 400);
     }
+    const prev = await store().get(KEY, { type: "json" });
     let categories = cleanCategories(body?.categories);
-    if (!categories) categories = (await store().get(KEY, { type: "json" }))?.categories ?? null;
+    if (!categories) categories = prev?.categories ?? null;
+    // ids of bundled projects you deleted, so they don't come back
+    const retired = Array.isArray(body?.retired)
+      ? [...new Set(body.retired.map((x) => str(x, 40)).filter(Boolean))].slice(0, 200)
+      : (prev?.retired ?? []);
     if (categories) {
       // every design must point at a category that exists
       for (const d of designs) {
@@ -116,8 +125,8 @@ export default async (req) => {
       }
     }
     const updatedAt = new Date().toISOString();
-    await store().setJSON(KEY, { designs, categories, updatedAt });
-    return json({ designs, categories, updatedAt });
+    await store().setJSON(KEY, { designs, categories, retired, updatedAt });
+    return json({ designs, categories, retired, updatedAt });
   }
   return json({ error: "Method not allowed" }, 405);
 };

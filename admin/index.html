@@ -117,7 +117,7 @@ details.more .fields{gap:14px}
 
 .drop{position:relative;display:grid;place-items:center;aspect-ratio:1;border:2px dashed var(--rule);border-radius:14px;background:var(--surface);cursor:pointer;overflow:hidden;text-align:center;padding:20px;transition:border-color .2s,background .2s}
 .drop:hover,.drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 6%,var(--surface))}
-.drop img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.drop img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:color-mix(in srgb,var(--ink) 5%,var(--surface))}
 .drop .ph{display:grid;gap:8px;justify-items:center;color:var(--graphite)}
 .drop .ph b{color:var(--ink);font-size:17px}
 .drop .ph svg{width:36px;height:36px;color:var(--accent)}
@@ -132,6 +132,19 @@ details.more .fields{gap:14px}
 .pal .c input[type=text]{width:84px;padding:4px 6px;font:13px var(--mono);border:0;background:transparent}
 .pal .c button{border:0;background:none;color:var(--graphite);cursor:pointer;padding:2px;display:grid}
 .pal .c button:hover{color:var(--bad)}
+
+/* Extra screens */
+.gal{margin-top:18px;display:grid;gap:10px}
+.gal-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.gal-head b{font-size:14px}
+.gal-head .hint{font-size:12.5px;color:var(--graphite)}
+.gal-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.gal-item{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:8px}
+.gal-item img{width:72px;height:48px;object-fit:cover;border-radius:6px;background:var(--rule)}
+.gal-item input{padding:8px 10px;font-size:14px}
+.gal-item .b{display:flex;gap:4px}
+.gal-item .icon-btn{width:34px;height:34px}
+.gal-item.new img{outline:2px solid var(--accent);outline-offset:1px}
 
 /* Categories */
 .cats{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 18px}
@@ -268,6 +281,12 @@ dialog.cm{width:min(720px,calc(100vw - 24px))}
         <input type="file" id="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" hidden>
         <div class="img-info"><span class="mono" id="imgInfo"></span><button type="button" class="btn small" id="replaceBtn" hidden>Replace image</button></div>
         <p class="err" id="imgErr"></p>
+        <div class="gal" id="gal">
+          <div class="gal-head"><b>Extra screens <span class="hint">optional</span></b><span class="hint">For websites and apps: add every page; they show one after another.</span></div>
+          <ul class="gal-list" id="galList"></ul>
+          <div><button type="button" class="btn small" id="galAdd"><svg class="i"><use href="#i-plus"/></svg>Add screens</button></div>
+          <input type="file" id="galFile" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" multiple hidden>
+        </div>
       </div>
       <div class="fields">
         <span class="mono">3 · Add the details</span>
@@ -425,30 +444,39 @@ let D = [];          // designs, in site order
 let C = [];          // categories, in tab order: [{ id, label, blurb }]
 let FILTER = 'all';  // category shown in the list
 let seeded = false;  // true while showing the starter designs from /data/designs.json
+let R = [];          // ids of bundled projects you deleted
+let BUNDLED = [];    // projects shipped in /data/bundled.json
 const catLabel = id => (C.find(c => c.id === id) || {}).label || id;
 async function load() {
   $('#list').innerHTML = '<li class="empty"><span class="spin"></span> Loading designs…</li>';
   let saved = null;
+  try { BUNDLED = (await fetch('/data/bundled.json', { cache: 'no-store' }).then(r => r.json())).designs || []; } catch { BUNDLED = []; }
   try {
     const r = await fetch('/api/designs', { cache: 'no-store' }).then(r => r.json());
-    if (Array.isArray(r.designs)) { D = r.designs; saved = r.categories; seeded = false; }
+    if (Array.isArray(r.designs)) { D = r.designs; saved = r.categories; R = r.retired || []; seeded = false; }
     else { const s = await fetch('/data/designs.json', { cache: 'no-store' }).then(r => r.json()); D = s.designs || []; saved = s.categories; seeded = true; }
   } catch { D = []; toast('Could not load designs. Refresh to try again.', true); }
+  // Projects shipped with the site files (e.g. CuraBot) join the list unless you deleted them
+  const before = new Set(D.map(d => d.id));
+  D = PF.mergeBundled(D, BUNDLED, R);
+  const added = D.filter(d => !before.has(d.id));
   // Designs from before categories existed get one from their title; you can change it in Edit
   const guessed = D.filter(d => !d.section);
   D.forEach(d => { if (!d.section) d.section = PF.sectionOf(d); });
   C = PF.categories(saved, D);
   const note = $('#autoNote');
-  note.hidden = !guessed.length;
-  if (guessed.length) note.innerHTML = `I put ${guessed.length === 1 ? 'this design' : `these ${guessed.length} designs`} into categories automatically: ${guessed.map(d => `<b>${esc(d.title)}</b> → ${esc(catLabel(d.section))}`).join(', ')}. If one is wrong, open it with Edit and pick the right category. Your next save stores them.`;
+  note.hidden = !guessed.length && !added.length;
+  note.innerHTML = '';
+  if (added.length) note.innerHTML += `<p style="margin:0 0 ${guessed.length ? '10px' : '0'}">New from your site files: ${added.map(d => `<b>${esc(d.title)}</b> in ${esc(catLabel(d.section))}`).join(', ')}. ${added.length === 1 ? 'It is' : 'They are'} already showing on your site. Edit or delete ${added.length === 1 ? 'it' : 'them'} like any other design.</p>`;
+  if (guessed.length) note.innerHTML += `I put ${guessed.length === 1 ? 'this design' : `these ${guessed.length} designs`} into categories automatically: ${guessed.map(d => `<b>${esc(d.title)}</b> → ${esc(catLabel(d.section))}`).join(', ')}. If one is wrong, open it with Edit and pick the right category. Your next save stores them.`;
   renderList();
 }
 // The featured design is always first, matching how the site shows it
 function norm(list) { const i = list.findIndex(d => d.featured); return i > 0 ? [list[i], ...list.slice(0, i), ...list.slice(i + 1)] : list; }
 async function save(list, okMsg, cats = C) {
   list = norm(list);
-  const r = await api('/api/designs', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ designs: list, categories: cats }) });
-  D = r.designs; C = PF.categories(r.categories || cats, D); seeded = false;
+  const r = await api('/api/designs', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ designs: list, categories: cats, retired: R }) });
+  D = r.designs; C = PF.categories(r.categories || cats, D); R = r.retired || R; seeded = false;
   $('#autoNote').hidden = true;
   renderList();
   if (okMsg) toast(okMsg);
@@ -486,6 +514,7 @@ function renderList() {
           ${d.featured ? '<span class="tag feat">Featured</span>' : ''}
           <span class="tag sec">${esc(catLabel(d.section))}</span>
           ${d.video ? '<span class="tag vid">Video</span>' : ''}
+          ${(d.gallery || []).length ? `<span class="tag vid">${(d.gallery || []).length + 1} screens</span>` : ''}
           ${d.group && d.group !== 'Other' ? `<span class="tag">${esc(d.group)}</span>` : ''}
           ${d.cat && d.cat !== d.group ? `<span class="tag">${esc(d.cat)}</span>` : ''}
           <span class="dots">${(d.sw || []).map(c => `<i style="background:${esc(c)}"></i>`).join('')}</span>
@@ -602,6 +631,7 @@ function palette(im, n = 4) {
 
 /* ---------- editor ---------- */
 const ed = $('#ed');
+let GAL = [];  // extra screens: { img, w, h, caption } or, before upload, { file, previewUrl, w, h, caption }
 let editing = -1, pending = null, curImg = '', curThumb = '', curW = 0, curH = 0, autoPal = [], dirty = false, curSec = '';
 const F = { title: '#fTitle', group: '#fGroup', cat: '#fCat', desc: '#fDesc', format: '#fFormat', channel: '#fChannel', type: '#fType', short: '#fShort', alt: '#fAlt', video: '#fVideo', link: '#fLink' };
 const isYT = u => /^https:\/\/i\.ytimg\.com\//.test(u || '');
@@ -621,6 +651,42 @@ $('#repick').addEventListener('click', async () => {
   if (autoPal.length) return setPal(autoPal);
   const src = pending ? null : (curThumb || curImg); if (!src || isYT(src)) return toast('Upload an image first.', true);
   try { const im = await loadImg(src); setPal(autoPal = palette(im)); dirty = true; } catch { toast('Could not read colours from that image.', true); }
+});
+
+/* extra screens */
+function renderGal() {
+  $('#galList').innerHTML = GAL.map((g, i) => `
+    <li class="gal-item${g.file ? ' new' : ''}" data-i="${i}">
+      <img src="${esc(g.previewUrl || g.img)}" alt="">
+      <input type="text" value="${esc(g.caption || '')}" maxlength="120" placeholder="Screen ${i + 2} name, e.g. About page" aria-label="Name of screen ${i + 2}">
+      <span class="b">
+        <button type="button" class="icon-btn" data-g="up" aria-label="Move screen up" ${i === 0 ? 'disabled' : ''}><svg class="i"><use href="#i-up"/></svg></button>
+        <button type="button" class="icon-btn" data-g="down" aria-label="Move screen down" ${i === GAL.length - 1 ? 'disabled' : ''}><svg class="i"><use href="#i-down"/></svg></button>
+        <button type="button" class="icon-btn" data-g="del" aria-label="Remove screen"><svg class="i"><use href="#i-x"/></svg></button>
+      </span>
+    </li>`).join('');
+  $('#galAdd').disabled = GAL.length >= 24;
+}
+$('#galAdd').addEventListener('click', () => $('#galFile').click());
+$('#galFile').addEventListener('change', async e => {
+  const files = [...e.target.files].filter(f => f.type.startsWith('image/')).slice(0, 24 - GAL.length); e.target.value = '';
+  for (const f of files) {
+    try {
+      const im = await loadImg(URL.createObjectURL(f));
+      const name = (f.name || '').replace(/\.[a-z0-9]+$/i, '').replace(/[-_]+/g, ' ').trim();
+      GAL.push({ file: f, previewUrl: im.src, w: im.naturalWidth, h: im.naturalHeight, caption: /^(img|image|frame|screenshot|untitled|pg ?\d+)\b/i.test(name) ? '' : name });
+    } catch { $('#imgErr').textContent = `“${f.name}” could not be opened as an image.`; }
+  }
+  dirty = true; renderGal();
+});
+$('#galList').addEventListener('input', e => { const li = e.target.closest('.gal-item'); if (li) { GAL[+li.dataset.i].caption = e.target.value; dirty = true; } });
+$('#galList').addEventListener('click', e => {
+  const b = e.target.closest('[data-g]'); if (!b) return;
+  const i = +b.closest('.gal-item').dataset.i, m = b.dataset.g;
+  if (m === 'up' && i > 0) [GAL[i - 1], GAL[i]] = [GAL[i], GAL[i - 1]];
+  if (m === 'down' && i < GAL.length - 1) [GAL[i + 1], GAL[i]] = [GAL[i], GAL[i + 1]];
+  if (m === 'del') { const [g] = GAL.splice(i, 1); if (g.previewUrl) URL.revokeObjectURL(g.previewUrl); }
+  dirty = true; renderGal();
 });
 
 /* category picker */
@@ -697,6 +763,7 @@ function openEditor(i = -1) {
   curImg = d.img || ''; curThumb = d.thumb || ''; curW = d.w || 0; curH = d.h || 0;
   showPreview(curImg, curImg ? 'Current image' : '');
   setPal(d.sw || []);
+  GAL = (d.gallery || []).map(g => ({ ...g })); renderGal();
   curSec = ''; $('#newCatRow').hidden = true; renderPills(); setSection(sec0, false);
   if (!sec0) $$('#pills input').forEach(r => r.checked = false);
   $('#edTitle').textContent = i >= 0 ? 'Edit design' : 'Add design';
@@ -758,7 +825,7 @@ $('#edForm').addEventListener('submit', async e => {
   if (!v.title) { err.textContent = 'Give the design a title.'; $('#fTitle').focus(); return; }
   err.textContent = '';
   const btn = $('#edSave'), label = btn.textContent; btn.disabled = true;
-  let img = curImg, thumb = curThumb, w = curW, h = curH, uploaded = null;
+  let img = curImg, thumb = curThumb, w = curW, h = curH, uploaded = null, uploadedScreens = null;
   try {
     if (pending) {
       btn.innerHTML = '<span class="spin"></span> Uploading image';
@@ -769,10 +836,23 @@ $('#edForm').addEventListener('submit', async e => {
       uploaded = await api('/api/upload', { method: 'POST', body: fd });
       img = uploaded.img; thumb = uploaded.thumb; w = pending.w; h = pending.h;
     }
+    const fresh = GAL.filter(g => g.file), upMap = new Map();
+    for (let k = 0; k < fresh.length; k++) {
+      const g = fresh[k];
+      btn.innerHTML = `<span class="spin"></span> Uploading screen ${k + 1} of ${fresh.length}`;
+      const p = await prepare(g.file);
+      const fd = new FormData();
+      const ext = { 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif', 'image/avif': 'avif' }[p.main.type] || 'jpg';
+      fd.append('file', p.main, 'screen.' + ext);
+      const up = await api('/api/upload', { method: 'POST', body: fd });
+      (uploadedScreens = uploadedScreens || []).push(up.img);
+      upMap.set(g, { img: up.img, w: p.w, h: p.h });
+    }
     btn.innerHTML = '<span class="spin"></span> Saving';
     const old = editing >= 0 ? D[editing] : null;
     const item = {
-      ...(old || {}), ...v, img, thumb, w, h, section: curSec, sw: getPal(), featured: $('#fFeat').checked,
+      ...(old || {}), ...v, img, thumb, w, h, section: curSec,
+      gallery: GAL.map(g => ({ ...g, ...(upMap.get(g) || {}) })).filter(g => g.img).map(g => ({ img: g.img, w: g.w || 0, h: g.h || 0, caption: (g.caption || '').trim() })), sw: getPal(), featured: $('#fFeat').checked,
       id: old?.id || 'd-' + Date.now().toString(36),
       alt: v.alt || `${catLabel(curSec)}: ${v.title}`,
       group: v.group,
@@ -783,11 +863,14 @@ $('#edForm').addEventListener('submit', async e => {
     const sec = curSec;
     await save(list, old ? 'Saved. Your site is updated.' : `Published in ${catLabel(sec)}. It’s live on your site now.`);
     if (uploaded && old && old.img !== img) deleteImages(old.img, old.thumb);
+    if (old) { const keep = new Set(item.gallery.map(g => g.img)); deleteImages(...(old.gallery || []).map(g => g.img).filter(u => !keep.has(u))); }
+    GAL.forEach(g => g.previewUrl && URL.revokeObjectURL(g.previewUrl));
     if (FILTER !== 'all' && FILTER !== sec) { FILTER = sec; renderList(); }
     dirty = false; pending = null; ed.close();
   } catch (e2) {
     err.textContent = e2.message;
     if (uploaded) deleteImages(uploaded.img, uploaded.thumb);
+    if (uploadedScreens) deleteImages(...uploadedScreens);
   }
   btn.disabled = false; btn.textContent = label;
 });
@@ -795,11 +878,13 @@ $('#edDelete').addEventListener('click', async () => {
   const d = D[editing]; if (!d) return;
   if (!confirm(`Delete “${d.title}” from your portfolio? This can’t be undone.`)) return;
   const btn = $('#edDelete'); btn.disabled = true;
+  const wasR = R;
+  if (BUNDLED.some(b => b.id === d.id) && !R.includes(d.id)) R = [...R, d.id];   // so it doesn't come back
   try {
     await save(D.filter((_, j) => j !== editing), `Deleted “${d.title}”`);
-    deleteImages(d.img, d.thumb);
+    deleteImages(d.img, d.thumb, ...(d.gallery || []).map(g => g.img));
     dirty = false; ed.close();
-  } catch (e) { $('#edErr').textContent = e.message; }
+  } catch (e) { R = wasR; $('#edErr').textContent = e.message; }
   btn.disabled = false;
 });
 

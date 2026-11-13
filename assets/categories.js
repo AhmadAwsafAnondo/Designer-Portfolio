@@ -7,7 +7,7 @@
   PF.DEFAULT_CATEGORIES = [
     { id: "graphic",   label: "Graphic Design",       blurb: "Posters, key visuals and print pieces built around one strong idea." },
     { id: "social",    label: "Social Media Posters", blurb: "Feed posts and ads made to stop the scroll and sell the product." },
-    { id: "uiux",      label: "UI/UX Design",         blurb: "Interfaces, user flows and landing pages designed in Figma." },
+    { id: "uiux",      label: "UI/UX & Web Design",   blurb: "Websites, apps and interfaces, designed in Figma and built for real users." },
     { id: "thumbnail", label: "Thumbnail Design",     blurb: "Bold, readable thumbnails that earn the click." },
     { id: "video",     label: "Video Editing",        blurb: "Edits, reels and short-form video." },
     { id: "branding",  label: "Logo & Branding",      blurb: "Logos, palettes and identity systems." },
@@ -40,6 +40,8 @@
   PF.categories = (saved, designs) => {
     const src = Array.isArray(saved) && saved.length ? saved : PF.DEFAULT_CATEGORIES;
     const out = src.filter((c) => c && c.id && c.label).map((c) => ({ id: c.id, label: c.label, blurb: c.blurb || "" }));
+    // the old default name for UI/UX became "UI/UX & Web Design"
+    out.forEach((c) => { if (c.id === "uiux" && c.label === "UI/UX Design") { c.label = "UI/UX & Web Design"; if (/^Interfaces, user flows and landing pages/.test(c.blurb)) c.blurb = PF.DEFAULT_CATEGORIES[2].blurb; } });
     (designs || []).forEach((d) => {
       const id = PF.sectionOf(d);
       if (!out.some((c) => c.id === id)) {
@@ -82,6 +84,20 @@
     if (/\.(mp4|webm|mov|m4v)$/i.test(u.pathname)) return { kind: "file", src: u.href };
     return { kind: "link", href: u.href };
   };
+
+  // Projects shipped in /data/bundled.json show up unless the saved list already has them
+  // or you deleted them in the admin (their id is then in "retired")
+  PF.mergeBundled = (designs, bundled, retired) => {
+    const have = new Set((designs || []).map((d) => d.id));
+    const gone = new Set(retired || []);
+    const add = (bundled || []).filter((b) => b && b.id && !have.has(b.id) && !gone.has(b.id));
+    if (!add.length) return designs || [];
+    const list = (designs || []).slice();
+    const at = list.length && list[0].featured ? 1 : 0;
+    list.splice(at, 0, ...add);
+    return list;
+  };
+  PF.screens = (d) => [{ img: d.img, w: d.w, h: d.h, caption: "" }, ...(Array.isArray(d.gallery) ? d.gallery : [])].filter((s) => s && s.img);
 
   PF.ratio = (d) => (d && d.w > 0 && d.h > 0 ? d.w / d.h : d && d.video ? 16 / 9 : 1);
 })();

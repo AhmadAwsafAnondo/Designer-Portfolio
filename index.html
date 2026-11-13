@@ -267,6 +267,16 @@ dialog.viewer::backdrop{background:color-mix(in srgb,#07080B 78%,transparent);ba
 .v-in.wide .v-side .specs{border-top:0;padding-top:0;margin-top:0}
 @media (max-width:820px){.v-in.wide .v-meta{grid-template-columns:1fr}.v-in.wide .v-meta > .v-side{grid-column:1;grid-row:auto}}
 .v-links{display:flex;gap:10px;flex-wrap:wrap}
+/* Multi-screen projects (websites, apps): details on top, every screen below */
+.v-in.case .v-meta{order:-1}
+.v-in.case .v-media{display:grid;gap:clamp(18px,2.4vw,32px);padding:clamp(16px,2.4vw,32px);place-items:stretch}
+.v-in.case .v-media img{max-height:none;border-radius:10px;display:block}
+.shot{margin:0}
+.shot figcaption{font:500 12px/1.4 var(--mono);color:#B9BCC6;margin-top:10px;letter-spacing:.04em}
+.shot figcaption b{color:#fff;margin-right:8px;font-weight:500}
+dialog.viewer.casew{max-width:min(1280px,calc(100vw - 32px))}
+.screens{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:6px;font:500 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;background:color-mix(in srgb,#07080B 70%,transparent);color:#fff;padding:7px 9px;border-radius:999px;backdrop-filter:blur(4px)}
+.screens svg{width:12px;height:12px}
 .v-meta{padding:clamp(22px,3vw,40px);display:grid;gap:16px;align-content:start}
 .v-meta h3{font-size:clamp(24px,2.6vw,34px);font-weight:800;font-stretch:125%}
 .v-meta p{color:var(--graphite)}
@@ -394,7 +404,7 @@ dialog.viewer::backdrop{background:color-mix(in srgb,#07080B 78%,transparent);ba
       <div class="hero-grid">
         <div class="hero-copy">
           <div class="kicker">
-            <span class="mono">Graphic design · Social media · UI/UX · Thumbnails · Video</span>
+            <span class="mono">Graphic design · Social media · UI/UX &amp; web · Thumbnails · Video</span>
           </div>
           <h1>Design that makes the product the <em>hero.</em></h1>
           <p>I’m Ahmad, a graphic designer working across social media posters, graphic design, UI/UX, thumbnails and video. Whatever the format, I go for clear hierarchy, strong lighting and a call to action nobody misses.</p>
@@ -467,8 +477,8 @@ dialog.viewer::backdrop{background:color-mix(in srgb,#07080B 78%,transparent);ba
         </div>
         <div class="svc">
           <span class="ico"><svg><use href="#i-layout"/></svg></span>
-          <h3>UI/UX design</h3>
-          <p>Accessible, pixel-perfect interfaces and landing pages with smooth user flows.</p>
+          <h3>UI/UX &amp; web design</h3>
+          <p>Websites, apps and landing pages with clear layouts and smooth user flows.</p>
           <span class="mono">Figma · Framer</span>
         </div>
         <div class="svc">
@@ -569,7 +579,7 @@ dialog.viewer::backdrop{background:color-mix(in srgb,#07080B 78%,transparent);ba
               <select id="f-service" name="service">
                 <option>Social media posters</option>
                 <option>Graphic design</option>
-                <option>UI/UX design</option>
+                <option>UI/UX &amp; web design</option>
                 <option>Thumbnail design</option>
                 <option>Video editing</option>
                 <option>Logo &amp; branding</option>
@@ -671,9 +681,9 @@ const ytFix = src => /i\.ytimg\.com\/.+maxresdefault/.test(src) ? ` onerror="thi
 function card(p, o = {}) {
   const feat = !!o.feat, c = catOf(PF.sectionOf(p));
   const specs = feat ? `<dl class="specs">${[['Category', c && c.label], ['Format', p.format], ['Channel', p.channel], ['Type', p.type]].filter(s => s[1]).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>` : '';
-  const r = o.r || PF.ratio(p);
+  const r = o.r || PF.ratio(p), n = PF.screens(p).length;
   return `<article class="card${feat ? ' feat' : ''}"${o.grp ? ` data-g="${PF.slug(p.group) || 'other'}"` : ''}>
-    <button class="proof" data-open="${esc(p.id)}" data-ctx="${esc(o.ctx || 'all')}" aria-label="${p.video ? 'Play' : 'View'} ${esc(p.title)}"><div class="img" style="--r:${r.toFixed(4)}"><img src="${esc(p.img)}" alt="${esc(p.alt || p.title)}" loading="${o.eager ? 'eager' : 'lazy'}"${ytFix(p.img)}>${o.kind && c ? `<span class="kind">${esc(c.label)}</span>` : ''}${p.video ? '<span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span>' : ''}<span class="view"><svg><use href="#i-expand"/></svg>${p.video ? 'Play' : 'View'}</span></div></button>
+    <button class="proof" data-open="${esc(p.id)}" data-ctx="${esc(o.ctx || 'all')}" aria-label="${p.video ? 'Play' : 'View'} ${esc(p.title)}"><div class="img" style="--r:${r.toFixed(4)}"><img src="${esc(p.img)}" alt="${esc(p.alt || p.title)}" loading="${o.eager ? 'eager' : 'lazy'}"${ytFix(p.img)}>${o.kind && c ? `<span class="kind">${esc(c.label)}</span>` : ''}${p.video ? '<span class="play" aria-hidden="true"><svg><use href="#i-play"/></svg></span>' : ''}${n > 1 ? `<span class="screens"><svg><use href="#i-image"/></svg>${n} screens</span>` : ''}<span class="view"><svg><use href="#i-expand"/></svg>${p.video ? 'Play' : 'View'}</span></div></button>
     <div class="meta">
       <div class="meta-top"><h3>${esc(p.title)}</h3>${p.cat ? `<span class="cat">${esc(p.cat)}</span>` : ''}</div>
       ${o.desc && p.desc ? `<p>${esc(p.desc)}</p>` : ''}
@@ -811,10 +821,13 @@ autoBtn.addEventListener('click', () => {
 });
 
 const getJSON = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : Promise.reject(r.status));
-getJSON('/api/designs')
-  .then(d => (d && Array.isArray(d.designs)) ? d : getJSON('/data/designs.json'))
-  .catch(() => getJSON('/data/designs.json'))
-  .then(d => render(d.designs, d.categories))
+Promise.all([
+  getJSON('/api/designs')
+    .then(d => (d && Array.isArray(d.designs)) ? d : getJSON('/data/designs.json'))
+    .catch(() => getJSON('/data/designs.json')),
+  getJSON('/data/bundled.json').catch(() => ({ designs: [] })),
+])
+  .then(([d, b]) => render(PF.mergeBundled(d.designs, b.designs, d.retired), d.categories))
   .catch(() => render([], null));
 
 // Viewer
@@ -823,14 +836,19 @@ function show(i) {
   if (!CTX.length) return;
   cur = (i + CTX.length) % CTX.length; const p = CTX[cur];
   const v = PF.video(p.video), c = catOf(PF.sectionOf(p));
-  const wide = PF.ratio(p) > 1.25 || (v && v.kind !== 'link' && !v.vertical);
+  const scr = PF.screens(p), isCase = !(v && (v.embed || v.kind === 'file')) && scr.length > 1;
+  const wide = isCase || PF.ratio(p) > 1.25 || (v && v.kind !== 'link' && !v.vertical);
   $('#v-in').classList.toggle('wide', !!wide);
+  $('#v-in').classList.toggle('case', isCase);
+  dlg.classList.toggle('casew', isCase);
   media.classList.toggle('vertical', !!(v && v.vertical));
   if (v && v.embed) media.innerHTML = `<iframe src="${esc(v.embed)}" title="${esc(p.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
   else if (v && v.kind === 'file') media.innerHTML = `<video src="${esc(v.src)}" poster="${esc(p.img)}" controls autoplay playsinline></video>`;
+  else if (isCase) media.innerHTML = scr.map((sc, i) => `<figure class="shot"><img src="${esc(sc.img)}" alt="${esc(i ? `${p.title}, screen ${i + 1}${sc.caption ? ': ' + sc.caption : ''}` : (p.alt || p.title))}"${sc.w && sc.h ? ` width="${sc.w}" height="${sc.h}"` : ''} loading="${i < 2 ? 'eager' : 'lazy'}"><figcaption><b>${pad(i + 1)} / ${pad(scr.length)}</b>${esc(sc.caption || (i ? '' : 'Cover'))}</figcaption></figure>`).join('');
   else media.innerHTML = `<img src="${esc(p.img)}" alt="${esc(p.alt || p.title)}"${ytFix(p.img)}>`;
+  dlg.scrollTop = 0;
   $('#v-title').textContent = p.title; $('#v-cat').textContent = c ? c.label : (p.cat || ''); $('#v-desc').textContent = p.desc || '';
-  $('#v-specs').innerHTML = [['Category', c && c.label], ['Format', p.format], ['Channel', p.channel], ['Type', p.type], ['Label', p.cat]].filter(s => s[1]).map(([k, val]) => `<dt>${k}</dt><dd>${esc(val)}</dd>`).join('');
+  $('#v-specs').innerHTML = [['Category', c && c.label], ['Screens', isCase ? String(scr.length) : ''], ['Format', p.format], ['Channel', p.channel], ['Type', p.type], ['Label', p.cat]].filter(s => s[1]).map(([k, val]) => `<dt>${k}</dt><dd>${esc(val)}</dd>`).join('');
   $('#v-hex').innerHTML = (p.sw || []).map(h => `<li><i style="background:${hex(h)}"></i>${esc(h)}</li>`).join('');
   $('#v-pal').hidden = !(p.sw || []).length;
   const links = [];

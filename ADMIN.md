@@ -19,6 +19,10 @@ Manage the designs in the Work section at **/admin** (e.g. https://ahmadawsafano
   describe, add or delete categories. You can also add one straight from the "Add design" form.
 - Video Editing: paste a YouTube, Vimeo, Google Drive or .mp4 link. With a YouTube link the image
   is optional, because the video's own thumbnail is used. Videos play inside the site's viewer.
+- Websites and apps: in the editor, use **Extra screens → Add screens** to add every page. On the site the
+  card shows "6 screens" and opens as a scrollable case study.
+- `data/bundled.json` holds projects shipped with the site files (CuraBot). They appear automatically;
+  edit or delete them in the admin like any other design (a deleted one stays deleted).
 - The starting list lives in `assets/categories.js`. Once you save categories in the admin, the
   saved list is used instead.
 
