@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="/assets/categories.js"></script>
 <style>
 :root{
   --paper:#F2F3F6; --surface:#FFFFFF; --ink:#12141A; --graphite:#555B69; --rule:#D8DBE2;
@@ -48,7 +49,7 @@ svg.i{width:18px;height:18px;flex:none}
 .icon-btn.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
 label.f{display:grid;gap:6px;font-weight:600;font-size:14px}
 label.f .hint{font-weight:400;color:var(--graphite);font-size:13px}
-input[type=text],input[type=password],textarea,select{width:100%;font:16px/1.4 var(--body);color:var(--ink);background:var(--surface);border:1.5px solid var(--rule);border-radius:10px;padding:11px 12px}
+input[type=text],input[type=url],input[type=password],textarea,select{width:100%;font:16px/1.4 var(--body);color:var(--ink);background:var(--surface);border:1.5px solid var(--rule);border-radius:10px;padding:11px 12px}
 input:focus,textarea:focus{border-color:var(--ink);outline:none}
 textarea{min-height:96px;resize:vertical}
 .err{color:var(--bad);font-size:14px;font-weight:500;min-height:1em}
@@ -132,6 +133,43 @@ details.more .fields{gap:14px}
 .pal .c button{border:0;background:none;color:var(--graphite);cursor:pointer;padding:2px;display:grid}
 .pal .c button:hover{color:var(--bad)}
 
+/* Categories */
+.cats{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 18px}
+.chip{font:500 14px/1 var(--body);padding:9px 14px;border-radius:999px;border:1.5px solid var(--rule);background:var(--surface);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.chip:hover{border-color:var(--ink)}
+.chip small{font:11px/1 var(--mono);opacity:.7}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip.manage{background:transparent;border-style:dashed;color:var(--graphite);margin-left:auto}
+.chip.manage:hover{color:var(--ink)}
+.tag.sec{border-color:color-mix(in srgb,var(--accent) 55%,var(--rule));color:var(--accent);font-weight:500}
+.tag.vid{border-color:var(--ink);color:var(--ink)}
+.ed-pick{padding:20px 22px 0}
+fieldset.pick{border:0;margin:0;padding:16px;display:grid;gap:12px;background:var(--surface);border:1px solid var(--rule);border-radius:14px}
+fieldset.pick legend{float:left;width:100%;padding:0;font-weight:600;font-size:15px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+fieldset.pick legend .hint{font-weight:400;color:var(--graphite);font-size:13px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;clear:both}
+.pill{position:relative;display:inline-flex}
+.pill input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.pill span,.pill.add{font:600 14px/1 var(--body);padding:11px 15px;border-radius:999px;border:1.5px solid var(--rule);background:var(--paper);color:var(--ink);display:inline-flex;gap:8px;align-items:center;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.pill:hover span{border-color:var(--ink)}
+.pill input:checked + span{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.pill input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.pill.add{border-style:dashed;color:var(--graphite);background:transparent}
+.pill.add:hover{color:var(--ink);border-color:var(--ink)}
+.newcat{display:flex;gap:8px;flex-wrap:wrap}
+.newcat input{flex:1;min-width:200px}
+.pick.bad{border-color:var(--bad);box-shadow:0 0 0 2px color-mix(in srgb,var(--bad) 25%,transparent)}
+dialog.cm{width:min(720px,calc(100vw - 24px))}
+.cm-body{padding:22px;display:grid;gap:14px}
+.cm-body > p{color:var(--graphite);margin:0}
+.cm-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.cm-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:12px}
+.cm-f{display:grid;gap:8px}
+.cm-f input{padding:9px 11px}
+.cm-f input.lbl{font-weight:600}
+.cm-btns{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:560px){.cm-row{grid-template-columns:1fr}.cm-btns{justify-content:flex-start}}
+
 /* Toast */
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:999px;font-weight:600;font-size:15px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-width:calc(100vw - 32px)}
 .toast.bad{background:var(--bad);color:#fff}
@@ -185,10 +223,12 @@ details.more .fields{gap:14px}
       <div>
         <span class="mono" id="countLbl">Designs</span>
         <h2>Your work</h2>
-        <p>Drag rows to change the order on your site. The starred design is shown large at the top of the Work section, so it always stays first.</p>
+        <p>Each design belongs to a category, and each category is a tab on your site. Drag rows to change the order. The starred design is shown large at the top of its category, and first in the contact sheet.</p>
       </div>
       <button class="btn accent" id="addBtn"><svg class="i"><use href="#i-plus"/></svg>Add design</button>
     </div>
+    <div class="cats" id="catBar" role="group" aria-label="Show designs in a category"></div>
+    <div class="note" id="autoNote" hidden></div>
     <div class="note" id="seedNote" hidden>These are the designs currently on your site. Your first change saves them to the admin, and from then on the site shows whatever you manage here.</div>
     <ul class="list" id="list"></ul>
   </main>
@@ -201,8 +241,20 @@ details.more .fields{gap:14px}
       <h2 id="edTitle">Add design</h2>
       <button type="button" class="icon-btn" id="edClose" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button>
     </div>
+    <div class="ed-pick">
+      <fieldset class="pick" id="pick">
+        <legend><span>1 · Choose a category</span><span class="hint">The tab this design appears under on your site</span></legend>
+        <div class="pills" id="pills"></div>
+        <div class="newcat" id="newCatRow" hidden>
+          <input type="text" id="newCatName" maxlength="40" placeholder="New category name, e.g. Motion graphics" aria-label="New category name">
+          <button type="button" class="btn small solid" id="newCatAdd">Add category</button>
+          <button type="button" class="btn small" id="newCatCancel">Cancel</button>
+        </div>
+      </fieldset>
+    </div>
     <div class="ed-body">
       <div>
+        <span class="mono" style="display:block;margin-bottom:10px">2 · Upload the image</span>
         <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose an image">
           <div class="ph" id="dropPh">
             <svg><use href="#i-upload"/></svg>
@@ -218,15 +270,21 @@ details.more .fields{gap:14px}
         <p class="err" id="imgErr"></p>
       </div>
       <div class="fields">
+        <span class="mono">3 · Add the details</span>
         <label class="f">Title
           <input type="text" id="fTitle" maxlength="120" placeholder="e.g. Summer Juice Launch" required>
         </label>
-        <div class="two">
-          <label class="f">Filter tab <span class="hint">Groups designs in the filter buttons</span>
-            <input type="text" id="fGroup" list="groups" maxlength="40" placeholder="e.g. Food">
+        <div id="videoSlotMain">
+          <label class="f" id="videoWrap">Video link <span class="hint">YouTube, Vimeo, Google Drive or a direct .mp4 link. With a YouTube link you can skip the image: the video’s own thumbnail is used.</span>
+            <input type="url" id="fVideo" maxlength="500" placeholder="https://youtu.be/…" inputmode="url">
           </label>
-          <label class="f">Category label <span class="hint">Small pink label on the card</span>
+        </div>
+        <div class="two">
+          <label class="f">Card label <span class="hint">Small pink label on the card</span>
             <input type="text" id="fCat" list="cats" maxlength="60" placeholder="e.g. Food &amp; beverage">
+          </label>
+          <label class="f">Tag <span class="hint">Optional filter inside the category</span>
+            <input type="text" id="fGroup" list="groups" maxlength="40" placeholder="e.g. Food">
           </label>
         </div>
         <label class="f">Description
@@ -240,7 +298,7 @@ details.more .fields{gap:14px}
             <button type="button" class="btn small" id="repick"><svg class="i"><use href="#i-wand"/></svg>Pick from image again</button>
           </div>
         </div>
-        <label class="check"><input type="checkbox" id="fFeat"> Feature this design (shown large at the top)</label>
+        <label class="check"><input type="checkbox" id="fFeat"> Feature this design (shown large at the top of its category)</label>
         <details class="more">
           <summary>More details</summary>
           <div class="fields">
@@ -257,6 +315,10 @@ details.more .fields{gap:14px}
                 <input type="text" id="fAlt" maxlength="300" placeholder="Social ad: …">
               </label>
             </div>
+            <label class="f">Project link <span class="hint">Optional: Behance, Figma prototype or live site. Shown as a button in the viewer.</span>
+              <input type="url" id="fLink" maxlength="500" placeholder="https://…" inputmode="url">
+            </label>
+            <div id="videoSlotMore"></div>
           </div>
         </details>
         <p class="err" id="edErr" role="alert"></p>
@@ -270,6 +332,26 @@ details.more .fields{gap:14px}
       </div>
     </div>
   </form>
+</dialog>
+
+<!-- Category manager -->
+<dialog class="ed cm" id="cm" aria-labelledby="cmTitle">
+  <div class="ed-head">
+    <h2 id="cmTitle">Categories</h2>
+    <button type="button" class="icon-btn" id="cmClose" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="cm-body">
+    <p>Each category is a tab on your site, in this order. Visitors only see categories that have at least one design, so empty ones stay hidden until you upload to them.</p>
+    <ul class="cm-list" id="cmList"></ul>
+    <div><button type="button" class="btn small" id="cmAdd"><svg class="i"><use href="#i-plus"/></svg>Add category</button></div>
+    <p class="err" id="cmErr" role="alert"></p>
+  </div>
+  <div class="ed-foot">
+    <div class="r">
+      <button type="button" class="btn" id="cmCancel">Cancel</button>
+      <button type="button" class="btn solid" id="cmSave">Save categories</button>
+    </div>
+  </div>
 </dialog>
 
 <datalist id="groups"></datalist><datalist id="cats"></datalist>
@@ -334,27 +416,41 @@ function signOut(msg) {
   $('#appView').hidden = true; $('#loginView').hidden = false;
   $('#loginErr').textContent = msg || '';
   if ($('#ed').open) $('#ed').close();
+  if ($('#cm').open) $('#cm').close();
 }
 $('#logout').addEventListener('click', () => signOut());
 
 /* ---------- data ---------- */
 let D = [];          // designs, in site order
+let C = [];          // categories, in tab order: [{ id, label, blurb }]
+let FILTER = 'all';  // category shown in the list
 let seeded = false;  // true while showing the starter designs from /data/designs.json
+const catLabel = id => (C.find(c => c.id === id) || {}).label || id;
 async function load() {
   $('#list').innerHTML = '<li class="empty"><span class="spin"></span> Loading designs…</li>';
+  let saved = null;
   try {
     const r = await fetch('/api/designs', { cache: 'no-store' }).then(r => r.json());
-    if (Array.isArray(r.designs)) { D = r.designs; seeded = false; }
-    else { D = (await fetch('/data/designs.json', { cache: 'no-store' }).then(r => r.json())).designs || []; seeded = true; }
+    if (Array.isArray(r.designs)) { D = r.designs; saved = r.categories; seeded = false; }
+    else { const s = await fetch('/data/designs.json', { cache: 'no-store' }).then(r => r.json()); D = s.designs || []; saved = s.categories; seeded = true; }
   } catch { D = []; toast('Could not load designs. Refresh to try again.', true); }
+  // Designs from before categories existed get one from their title; you can change it in Edit
+  const guessed = D.filter(d => !d.section);
+  D.forEach(d => { if (!d.section) d.section = PF.sectionOf(d); });
+  C = PF.categories(saved, D);
+  const note = $('#autoNote');
+  note.hidden = !guessed.length;
+  if (guessed.length) note.innerHTML = `I put ${guessed.length === 1 ? 'this design' : `these ${guessed.length} designs`} into categories automatically: ${guessed.map(d => `<b>${esc(d.title)}</b> → ${esc(catLabel(d.section))}`).join(', ')}. If one is wrong, open it with Edit and pick the right category. Your next save stores them.`;
   renderList();
 }
 // The featured design is always first, matching how the site shows it
 function norm(list) { const i = list.findIndex(d => d.featured); return i > 0 ? [list[i], ...list.slice(0, i), ...list.slice(i + 1)] : list; }
-async function save(list, okMsg) {
+async function save(list, okMsg, cats = C) {
   list = norm(list);
-  const r = await api('/api/designs', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ designs: list }) });
-  D = r.designs; seeded = false; renderList();
+  const r = await api('/api/designs', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ designs: list, categories: cats }) });
+  D = r.designs; C = PF.categories(r.categories || cats, D); seeded = false;
+  $('#autoNote').hidden = true;
+  renderList();
   if (okMsg) toast(okMsg);
 }
 const blobKey = u => (typeof u === 'string' && u.startsWith('/img/')) ? u.slice(5) : null;
@@ -365,41 +461,58 @@ function deleteImages(...urls) {
 }
 
 /* ---------- list ---------- */
+const visible = () => D.map((d, i) => i).filter(i => FILTER === 'all' || D[i].section === FILTER);
+function renderBar() {
+  if (FILTER !== 'all' && !C.some(c => c.id === FILTER)) FILTER = 'all';
+  const n = id => D.filter(d => d.section === id).length;
+  $('#catBar').innerHTML = `<button class="chip" data-f="all" aria-pressed="${FILTER === 'all'}">All <small>${pad(D.length)}</small></button>` +
+    C.map(c => `<button class="chip" data-f="${esc(c.id)}" aria-pressed="${FILTER === c.id}">${esc(c.label)} <small>${pad(n(c.id))}</small></button>`).join('') +
+    `<button class="chip manage" id="manageBtn" type="button">Manage categories</button>`;
+}
 function renderList() {
+  renderBar();
   $('#seedNote').hidden = !seeded;
   $('#countLbl').textContent = `${pad(D.length)} design${D.length === 1 ? '' : 's'} on your site`;
-  const L = $('#list');
+  const L = $('#list'), vis = visible();
   if (!D.length) { L.innerHTML = '<li class="empty"><b>No designs yet.</b><br>Click “Add design” to upload your first one.</li>'; fillLists(); return; }
-  L.innerHTML = D.map((d, i) => `
+  if (!vis.length) { L.innerHTML = `<li class="empty"><b>Nothing in ${esc(catLabel(FILTER))} yet.</b><br>Click “Add design” to upload the first one. Until then this tab stays hidden on your site.</li>`; fillLists(); return; }
+  L.innerHTML = vis.map((i, k) => { const d = D[i], prev = vis[k - 1]; return `
     <li class="row" draggable="${!d.featured}" data-i="${i}">
       <span class="grip" title="Drag to reorder" aria-hidden="true"><svg class="i"><use href="#i-grip"/></svg></span>
       <img src="${esc(d.thumb || d.img)}" alt="" loading="lazy">
       <div class="t">
-        <h3><span class="num">${pad(i + 1)}</span>${esc(d.title)}</h3>
+        <h3><span class="num">${pad(k + 1)}</span>${esc(d.title)}</h3>
         <div class="sub">
           ${d.featured ? '<span class="tag feat">Featured</span>' : ''}
-          <span class="tag">${esc(d.group || 'Other')}</span>
+          <span class="tag sec">${esc(catLabel(d.section))}</span>
+          ${d.video ? '<span class="tag vid">Video</span>' : ''}
+          ${d.group && d.group !== 'Other' ? `<span class="tag">${esc(d.group)}</span>` : ''}
           ${d.cat && d.cat !== d.group ? `<span class="tag">${esc(d.cat)}</span>` : ''}
           <span class="dots">${(d.sw || []).map(c => `<i style="background:${esc(c)}"></i>`).join('')}</span>
         </div>
       </div>
       <div class="btns">
-        <button class="icon-btn" data-act="up" aria-label="Move ${esc(d.title)} up" ${i === 0 || d.featured || (i === 1 && D[0].featured) ? 'disabled' : ''}><svg class="i"><use href="#i-up"/></svg></button>
-        <button class="icon-btn" data-act="down" aria-label="Move ${esc(d.title)} down" ${i === D.length - 1 || d.featured ? 'disabled' : ''}><svg class="i"><use href="#i-down"/></svg></button>
+        <button class="icon-btn" data-act="up" aria-label="Move ${esc(d.title)} up" ${k === 0 || d.featured || D[prev]?.featured ? 'disabled' : ''}><svg class="i"><use href="#i-up"/></svg></button>
+        <button class="icon-btn" data-act="down" aria-label="Move ${esc(d.title)} down" ${k === vis.length - 1 || d.featured ? 'disabled' : ''}><svg class="i"><use href="#i-down"/></svg></button>
         <button class="icon-btn ${d.featured ? 'on' : ''}" data-act="feat" aria-label="${d.featured ? 'Featured' : 'Make featured'}: ${esc(d.title)}" aria-pressed="${!!d.featured}"><svg class="i"><use href="#i-star"/></svg></button>
         <button class="btn small" data-act="edit"><svg class="i"><use href="#i-edit"/></svg>Edit</button>
       </div>
-    </li>`).join('');
+    </li>`; }).join('');
   fillLists();
 }
 function fillLists() {
   const uniq = (k, extra = []) => [...new Set([...D.map(d => d[k]).filter(Boolean), ...extra])];
   const opts = (id, vals) => $(id).innerHTML = vals.map(v => `<option value="${esc(v)}">`).join('');
   opts('#groups', uniq('group')); opts('#cats', uniq('cat'));
-  opts('#formats', uniq('format', ['1080 × 1080 px, square feed post', '1080 × 1350 px, portrait feed post', '1080 × 1920 px, story / reel', 'A3 poster']));
-  opts('#channels', uniq('channel', ['Instagram & Facebook', 'Instagram', 'Facebook', 'LinkedIn', 'Print']));
-  opts('#types', uniq('type', ['Concept ad', 'Client work', 'Product poster', 'Brand identity']));
+  opts('#formats', uniq('format', ['1080 × 1080 px, square feed post', '1080 × 1350 px, portrait feed post', '1080 × 1920 px, story / reel', '1280 × 720 px, 16:9', '1920 × 1080, 16:9', 'A3 poster', 'Web & mobile']));
+  opts('#channels', uniq('channel', ['Instagram & Facebook', 'Instagram', 'Facebook', 'LinkedIn', 'YouTube', 'TikTok', 'Figma', 'Print']));
+  opts('#types', uniq('type', ['Concept ad', 'Client work', 'Product poster', 'Poster', 'UI/UX design', 'Video thumbnail', 'Video edit', 'Brand identity']));
 }
+$('#catBar').addEventListener('click', e => {
+  if (e.target.closest('#manageBtn')) return openManager();
+  const b = e.target.closest('[data-f]'); if (!b) return;
+  FILTER = b.dataset.f; renderList();
+});
 let busy = false;
 async function reorder(list, msg) {
   if (busy) return; busy = true;
@@ -411,9 +524,11 @@ async function reorder(list, msg) {
 $('#list').addEventListener('click', e => {
   const b = e.target.closest('[data-act]'); if (!b) return;
   const i = +b.closest('.row').dataset.i, act = b.dataset.act, list = D.slice();
+  const vis = visible(), k = vis.indexOf(i);
   if (act === 'edit') return openEditor(i);
-  if (act === 'up' && i > 0) { [list[i - 1], list[i]] = [list[i], list[i - 1]]; reorder(list, 'Order saved'); }
-  if (act === 'down' && i < list.length - 1) { [list[i + 1], list[i]] = [list[i], list[i + 1]]; reorder(list, 'Order saved'); }
+  // up/down move past the neighbour you can see (others in the same category)
+  if (act === 'up' && k > 0) { const j = vis[k - 1]; [list[j], list[i]] = [list[i], list[j]]; reorder(list, 'Order saved'); }
+  if (act === 'down' && k < vis.length - 1) { const j = vis[k + 1]; [list[j], list[i]] = [list[i], list[j]]; reorder(list, 'Order saved'); }
   if (act === 'feat') reorder(list.map((d, j) => ({ ...d, featured: j === i ? !d.featured : false })), list[i].featured ? 'No featured design now' : `“${list[i].title}” is now featured`);
 });
 // drag and drop
@@ -455,10 +570,10 @@ async function prepare(file) {
       while (!png && main && main.size > MAX_BYTES && q > 0.5) { q -= 0.08; main = await toBlob(c, 'image/jpeg', q); }
       if (!main || main.size > MAX_BYTES) throw new Error('This image is too large even after compressing. Try exporting it smaller.');
     }
-    // square thumbnail for the hero contact sheet and the admin list
-    const T = 480, side = Math.min(w0, h0);
-    const tc = Object.assign(document.createElement('canvas'), { width: T, height: T });
-    tc.getContext('2d').drawImage(im, (w0 - side) / 2, (h0 - side) / 2, side, side, 0, 0, T, T);
+    // thumbnail for the hero contact sheet and the admin list (keeps the image's shape)
+    const T = 640, ts = Math.min(1, T / Math.max(w0, h0));
+    const tc = Object.assign(document.createElement('canvas'), { width: Math.max(1, Math.round(w0 * ts)), height: Math.max(1, Math.round(h0 * ts)) });
+    const tx = tc.getContext('2d'); tx.fillStyle = '#fff'; tx.fillRect(0, 0, tc.width, tc.height); tx.drawImage(im, 0, 0, tc.width, tc.height);
     const thumb = await toBlob(tc, 'image/jpeg', 0.85);
     return { main, thumb, w, h, w0, h0, palette: palette(im), resized: needs };
   } finally { URL.revokeObjectURL(url); }
@@ -487,8 +602,9 @@ function palette(im, n = 4) {
 
 /* ---------- editor ---------- */
 const ed = $('#ed');
-let editing = -1, pending = null, curImg = '', curThumb = '', autoPal = [], dirty = false;
-const F = { title: '#fTitle', group: '#fGroup', cat: '#fCat', desc: '#fDesc', format: '#fFormat', channel: '#fChannel', type: '#fType', short: '#fShort', alt: '#fAlt' };
+let editing = -1, pending = null, curImg = '', curThumb = '', curW = 0, curH = 0, autoPal = [], dirty = false, curSec = '';
+const F = { title: '#fTitle', group: '#fGroup', cat: '#fCat', desc: '#fDesc', format: '#fFormat', channel: '#fChannel', type: '#fType', short: '#fShort', alt: '#fAlt', video: '#fVideo', link: '#fLink' };
+const isYT = u => /^https:\/\/i\.ytimg\.com\//.test(u || '');
 function setPal(list) {
   $('#pal').innerHTML = list.map(c => `<span class="c"><input type="color" value="${esc(c.length === 4 ? '#' + [...c.slice(1)].map(x => x + x).join('') : c)}" aria-label="Colour ${esc(c)}"><input type="text" value="${esc(c)}" maxlength="7" aria-label="Hex code"><button type="button" aria-label="Remove ${esc(c)}"><svg class="i" style="width:14px;height:14px"><use href="#i-x"/></svg></button></span>`).join('');
   $('#addColor').disabled = list.length >= 6;
@@ -503,41 +619,105 @@ $('#pal').addEventListener('click', e => { const b = e.target.closest('button');
 $('#addColor').addEventListener('click', () => { setPal([...getPal(), '#888888']); dirty = true; $$('#pal input[type=color]').pop().click(); });
 $('#repick').addEventListener('click', async () => {
   if (autoPal.length) return setPal(autoPal);
-  const src = pending ? null : (curThumb || curImg); if (!src) return toast('Add an image first.', true);
+  const src = pending ? null : (curThumb || curImg); if (!src || isYT(src)) return toast('Upload an image first.', true);
   try { const im = await loadImg(src); setPal(autoPal = palette(im)); dirty = true; } catch { toast('Could not read colours from that image.', true); }
 });
 
+/* category picker */
+function renderPills() {
+  $('#pills').innerHTML = C.map(c => `<label class="pill"><input type="radio" name="sec" value="${esc(c.id)}"${c.id === curSec ? ' checked' : ''}><span>${esc(c.label)}</span></label>`).join('') +
+    '<button type="button" class="pill add" id="newCatBtn"><svg class="i" style="width:15px;height:15px"><use href="#i-plus"/></svg>New category</button>';
+}
+function setSection(id, fromUser) {
+  const prev = curSec; curSec = id;
+  $('#pick').classList.remove('bad');
+  const r = $(`#pills input[value="${CSS.escape(id)}"]`); if (r) r.checked = true;
+  // video link field sits up front for video work, under "More details" otherwise
+  const showMain = id === 'video';
+  (showMain ? $('#videoSlotMain') : $('#videoSlotMore')).append($('#videoWrap'));
+  $('#drop .ph b').textContent = id === 'video' ? 'Drop a cover image here' : 'Drop your design here';
+  // swap in suggested details for a new design, unless you've typed your own
+  if (fromUser && editing < 0) {
+    const was = PF.CATEGORY_DEFAULTS[prev] || {}, now = PF.CATEGORY_DEFAULTS[id] || {};
+    [['format', '#fFormat'], ['channel', '#fChannel'], ['type', '#fType']].forEach(([k, sel]) => {
+      const el = $(sel); if (!el.value || el.value === (was[k] || '')) el.value = now[k] || '';
+    });
+  }
+}
+$('#pills').addEventListener('change', e => { if (e.target.name === 'sec') { setSection(e.target.value, true); dirty = true; } });
+$('#pills').addEventListener('click', e => {
+  if (!e.target.closest('#newCatBtn')) return;
+  $('#newCatRow').hidden = false; $('#newCatName').value = ''; $('#newCatName').focus();
+});
+function uniqueId(label, list) {
+  let id = PF.slug(label) || 'category', n = 2; const base = id;
+  while (list.some(c => c.id === id)) id = `${base}-${n++}`;
+  return id;
+}
+function addCategoryFromInput() {
+  const label = $('#newCatName').value.trim();
+  if (!label) { $('#newCatName').focus(); return; }
+  const same = C.find(c => c.label.toLowerCase() === label.toLowerCase());
+  const id = same ? same.id : uniqueId(label, C);
+  if (!same) C = [...C, { id, label, blurb: '', _new: true }];   // saved together with the design
+  $('#newCatRow').hidden = true; renderPills(); setSection(id, true); dirty = true;
+}
+$('#newCatAdd').addEventListener('click', addCategoryFromInput);
+$('#newCatName').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addCategoryFromInput(); } if (e.key === 'Escape') { e.preventDefault(); $('#newCatRow').hidden = true; } });
+$('#newCatCancel').addEventListener('click', () => { $('#newCatRow').hidden = true; });
+
+/* links */
+function fixUrl(v) {
+  v = (v || '').trim(); if (!v) return '';
+  if (/^http:\/\//i.test(v)) v = 'https://' + v.slice(7);
+  if (!/^https:\/\//i.test(v)) v = 'https://' + v.replace(/^\/+/, '');
+  try { return new URL(v).href; } catch { return null; }
+}
+// A YouTube link fills in the cover image if you haven't uploaded one
+$('#fVideo').addEventListener('input', () => {
+  const v = PF.video(fixUrl($('#fVideo').value));
+  if (pending || (curImg && !isYT(curImg))) return;
+  if (v && v.kind === 'youtube') { curImg = v.cover; curThumb = v.thumb; curW = 1280; curH = 720; showPreview(v.cover, 'Using the YouTube thumbnail · upload an image to replace it'); }
+  else if (isYT(curImg)) { curImg = curThumb = ''; curW = curH = 0; showPreview('', ''); }
+});
+
 function showPreview(src, info) {
-  $('#preview').src = src; $('#preview').hidden = !src; $('#dropPh').hidden = !!src;
+  $('#preview').src = src || ''; $('#preview').hidden = !src; $('#dropPh').hidden = !!src;
   $('#replaceBtn').hidden = !src; $('#imgInfo').textContent = info || '';
 }
+// learn the size of images saved before sizes were stored
+$('#preview').addEventListener('load', () => { if (!pending && curImg && !curW) { curW = $('#preview').naturalWidth; curH = $('#preview').naturalHeight; } });
+$('#preview').addEventListener('error', () => { const p = $('#preview'); if (/maxresdefault/.test(p.src)) p.src = p.src.replace('maxresdefault', 'hqdefault'); });
 function openEditor(i = -1) {
   editing = i; pending = null; autoPal = []; dirty = false;
-  const d = i >= 0 ? D[i] : { format: '1080 × 1080 px, square feed post', channel: 'Instagram & Facebook', type: 'Concept ad', sw: [] };
+  const sec0 = i >= 0 ? D[i].section : (FILTER !== 'all' ? FILTER : '');
+  const d = i >= 0 ? D[i] : { ...(PF.CATEGORY_DEFAULTS[sec0] || { format: '', channel: '', type: '' }), sw: [] };
   for (const [k, sel] of Object.entries(F)) $(sel).value = d[k] || '';
   $('#fFeat').checked = !!d.featured;
-  curImg = d.img || ''; curThumb = d.thumb || '';
-  showPreview(curThumb || curImg, curImg ? 'Current image' : '');
-  if (curImg) { $('#preview').src = curImg; }
+  curImg = d.img || ''; curThumb = d.thumb || ''; curW = d.w || 0; curH = d.h || 0;
+  showPreview(curImg, curImg ? 'Current image' : '');
   setPal(d.sw || []);
+  curSec = ''; $('#newCatRow').hidden = true; renderPills(); setSection(sec0, false);
+  if (!sec0) $$('#pills input').forEach(r => r.checked = false);
   $('#edTitle').textContent = i >= 0 ? 'Edit design' : 'Add design';
   $('#edSave').textContent = i >= 0 ? 'Save changes' : 'Publish';
   $('#edDelete').hidden = i < 0;
   $('#edErr').textContent = ''; $('#imgErr').textContent = '';
   $('.more').open = i >= 0;
   try { ed.showModal(); } catch { ed.setAttribute('open', ''); }
-  (i >= 0 ? $('#fTitle') : $('#drop')).focus();
+  (i >= 0 ? $('#fTitle') : (sec0 ? $('#drop') : $('#pills input'))).focus();
 }
 $('#addBtn').addEventListener('click', () => openEditor(-1));
 function closeEditor() {
   if (dirty && !confirm('Discard your changes to this design?')) return;
   if (pending?.previewUrl) URL.revokeObjectURL(pending.previewUrl);
-  pending = null; ed.close();
+  pending = null; C = PF.categories(C.filter(c => !c._new), D); ed.close();
 }
 $('#edClose').addEventListener('click', closeEditor);
 $('#edCancel').addEventListener('click', closeEditor);
 ed.addEventListener('cancel', e => { e.preventDefault(); closeEditor(); });
 $('#edForm').addEventListener('input', () => dirty = true);
+$('#edForm').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'newCatName') e.preventDefault(); });
 
 async function takeFile(file) {
   $('#imgErr').textContent = ''; $('#dropBusy').hidden = false;
@@ -570,11 +750,15 @@ $('#edForm').addEventListener('submit', async e => {
   e.preventDefault();
   const v = Object.fromEntries(Object.entries(F).map(([k, sel]) => [k, $(sel).value.trim()]));
   const err = $('#edErr');
-  if (!pending && !curImg) { err.textContent = 'Add an image for this design.'; return; }
+  if (!curSec) { err.textContent = 'Choose a category for this design (step 1 at the top).'; $('#pick').classList.add('bad'); $('#pick').scrollIntoView({ block: 'nearest' }); ($('#pills input') || $('#newCatBtn')).focus(); return; }
+  v.video = fixUrl(v.video); v.link = fixUrl(v.link);
+  if (v.video === null) { err.textContent = 'The video link doesn’t look right. Paste the full address, e.g. https://youtu.be/…'; $('#fVideo').focus(); return; }
+  if (v.link === null) { err.textContent = 'The project link doesn’t look right. Paste the full address, starting with https://'; $('#fLink').focus(); return; }
+  if (!pending && !curImg) { err.textContent = curSec === 'video' ? 'Add a cover image, or paste a YouTube link to use its thumbnail.' : 'Add an image for this design.'; return; }
   if (!v.title) { err.textContent = 'Give the design a title.'; $('#fTitle').focus(); return; }
   err.textContent = '';
   const btn = $('#edSave'), label = btn.textContent; btn.disabled = true;
-  let img = curImg, thumb = curThumb, uploaded = null;
+  let img = curImg, thumb = curThumb, w = curW, h = curH, uploaded = null;
   try {
     if (pending) {
       btn.innerHTML = '<span class="spin"></span> Uploading image';
@@ -583,21 +767,23 @@ $('#edForm').addEventListener('submit', async e => {
       fd.append('file', pending.main, 'design.' + ext);
       fd.append('thumb', pending.thumb, 'thumb.jpg');
       uploaded = await api('/api/upload', { method: 'POST', body: fd });
-      img = uploaded.img; thumb = uploaded.thumb;
+      img = uploaded.img; thumb = uploaded.thumb; w = pending.w; h = pending.h;
     }
     btn.innerHTML = '<span class="spin"></span> Saving';
     const old = editing >= 0 ? D[editing] : null;
     const item = {
-      ...(old || {}), ...v, img, thumb, sw: getPal(), featured: $('#fFeat').checked,
+      ...(old || {}), ...v, img, thumb, w, h, section: curSec, sw: getPal(), featured: $('#fFeat').checked,
       id: old?.id || 'd-' + Date.now().toString(36),
-      alt: v.alt || `${v.cat ? v.cat + ' design' : 'Design'}: ${v.title}`,
-      group: v.group || v.cat || 'Other',
+      alt: v.alt || `${catLabel(curSec)}: ${v.title}`,
+      group: v.group,
     };
     let list = D.slice();
     if (old) list[editing] = item; else list.unshift(item); // new designs appear first
     if (item.featured) list = list.map(d => d === item ? d : { ...d, featured: false });
-    await save(list, old ? 'Saved. Your site is updated.' : 'Published. It’s live on your site now.');
+    const sec = curSec;
+    await save(list, old ? 'Saved. Your site is updated.' : `Published in ${catLabel(sec)}. It’s live on your site now.`);
     if (uploaded && old && old.img !== img) deleteImages(old.img, old.thumb);
+    if (FILTER !== 'all' && FILTER !== sec) { FILTER = sec; renderList(); }
     dirty = false; pending = null; ed.close();
   } catch (e2) {
     err.textContent = e2.message;
@@ -615,6 +801,62 @@ $('#edDelete').addEventListener('click', async () => {
     dirty = false; ed.close();
   } catch (e) { $('#edErr').textContent = e.message; }
   btn.disabled = false;
+});
+
+/* ---------- category manager ---------- */
+const cm = $('#cm');
+let CM = [], cmDirty = false;
+function renderManager() {
+  const n = id => D.filter(d => d.section === id).length;
+  $('#cmList').innerHTML = CM.map((c, i) => `
+    <li class="cm-row" data-i="${i}">
+      <div class="cm-f">
+        <input type="text" class="lbl" value="${esc(c.label)}" maxlength="40" aria-label="Category name" data-k="label">
+        <input type="text" value="${esc(c.blurb)}" maxlength="240" placeholder="One line shown under the title on your site (optional)" aria-label="Description for ${esc(c.label)}" data-k="blurb">
+      </div>
+      <div class="cm-btns">
+        <span class="tag">${pad(n(c.id))} design${n(c.id) === 1 ? '' : 's'}</span>
+        <button type="button" class="icon-btn" data-m="up" aria-label="Move ${esc(c.label)} up" ${i === 0 ? 'disabled' : ''}><svg class="i"><use href="#i-up"/></svg></button>
+        <button type="button" class="icon-btn" data-m="down" aria-label="Move ${esc(c.label)} down" ${i === CM.length - 1 ? 'disabled' : ''}><svg class="i"><use href="#i-down"/></svg></button>
+        <button type="button" class="icon-btn" data-m="del" aria-label="Delete ${esc(c.label)}" title="${n(c.id) ? 'Move or delete its designs first' : 'Delete category'}" ${n(c.id) ? 'disabled' : ''}><svg class="i"><use href="#i-trash"/></svg></button>
+      </div>
+    </li>`).join('');
+}
+function openManager() {
+  CM = C.map(c => ({ ...c })); cmDirty = false; $('#cmErr').textContent = '';
+  renderManager();
+  try { cm.showModal(); } catch { cm.setAttribute('open', ''); }
+}
+function closeManager() { if (cmDirty && !confirm('Discard your changes to the categories?')) return; cm.close(); }
+$('#cmList').addEventListener('input', e => { const r = e.target.closest('.cm-row'); if (!r || !e.target.dataset.k) return; CM[+r.dataset.i][e.target.dataset.k] = e.target.value; cmDirty = true; });
+$('#cmList').addEventListener('click', e => {
+  const b = e.target.closest('[data-m]'); if (!b) return;
+  const i = +b.closest('.cm-row').dataset.i, m = b.dataset.m;
+  if (m === 'up' && i > 0) [CM[i - 1], CM[i]] = [CM[i], CM[i - 1]];
+  if (m === 'down' && i < CM.length - 1) [CM[i + 1], CM[i]] = [CM[i], CM[i + 1]];
+  if (m === 'del') CM.splice(i, 1);
+  cmDirty = true; renderManager();
+});
+$('#cmAdd').addEventListener('click', () => {
+  CM.push({ id: '', label: '', blurb: '' }); cmDirty = true; renderManager();
+  $$('#cmList .lbl').pop().focus();
+});
+$('#cmClose').addEventListener('click', closeManager);
+$('#cmCancel').addEventListener('click', closeManager);
+cm.addEventListener('cancel', e => { e.preventDefault(); closeManager(); });
+$('#cmSave').addEventListener('click', async () => {
+  const out = [];
+  for (const c of CM) {
+    const label = c.label.trim();
+    if (!label) { if (!c.id) continue; $('#cmErr').textContent = 'Every category needs a name.'; return; }
+    if (out.some(o => o.label.toLowerCase() === label.toLowerCase())) { $('#cmErr').textContent = `There are two categories called “${label}”.`; return; }
+    out.push({ id: c.id || uniqueId(label, [...CM, ...out]), label, blurb: (c.blurb || '').trim() });
+  }
+  if (!out.length) { $('#cmErr').textContent = 'Keep at least one category.'; return; }
+  const btn = $('#cmSave'); btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Saving';
+  try { await save(D, 'Categories saved', out); cmDirty = false; cm.close(); }
+  catch (e) { $('#cmErr').textContent = e.message; }
+  btn.disabled = false; btn.textContent = 'Save categories';
 });
 
 /* ---------- start ---------- */
